@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Motor-Unity%202022-black?style=flat-square&logo=unity"/>
+  <img src="https://img.shields.io/badge/Motor-Unity%206-black?style=flat-square&logo=unity"/>
   <img src="https://img.shields.io/badge/Lenguaje-C%23-239120?style=flat-square&logo=csharp"/>
   <img src="https://img.shields.io/badge/Plataforma-Windows%2064bit-0078D6?style=flat-square&logo=windows"/>
   <img src="https://img.shields.io/badge/Estado-v1.0.0-576533?style=flat-square"/>
@@ -66,7 +66,7 @@ El proyecto se sustenta en tres subsistemas principales:
 
 ### Tecnologías utilizadas
 
-- **Motor:** Unity 2022
+- **Motor:** Unity 6
 - **Lenguaje:** C#
 - **Control de versiones:** Git / GitHub
 - **Web:** Python (Flask) + HTML/CSS/JS + SQLite
@@ -100,10 +100,10 @@ Reconquest parte de una **ucronía**: ¿qué habría pasado si la revolución hu
 
 Desarrollado como **Trabajo de Fin de Grado**.
 
-- **Desarrollador:** *Xabier Urrutia*
-- **Tutor:** *Roberto Carballedo*
-- **Universidad:** *Universidad de Deusto*
-- **Año:** 2026
+- **Desarrollador:** *Tu nombre aquí*
+- **Tutor:** *Nombre del tutor*
+- **Universidad:** *Nombre de la universidad*
+- **Año:** 2025
 
 ---
 
