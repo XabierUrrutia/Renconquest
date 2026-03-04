@@ -100,10 +100,10 @@ Reconquest parte de una **ucronía**: ¿qué habría pasado si la revolución hu
 
 Desarrollado como **Trabajo de Fin de Grado**.
 
-- **Desarrollador:** *Tu nombre aquí*
-- **Tutor:** *Nombre del tutor*
-- **Universidad:** *Nombre de la universidad*
-- **Año:** 2025
+- **Desarrollador:** *Xabier Urrutia*
+- **Tutor:** *Roberto Carballedo*
+- **Universidad:** *Universidad de Deusto*
+- **Año:** 2026
 
 ---
 
