@@ -132,7 +132,7 @@ public class OptionsMenuUI : MonoBehaviour
 
             // Añadir las opciones (El orden importa: 0 = Inglés, 1 = Portugués)
             languageDropdown.options.Add(new TMP_Dropdown.OptionData("English"));
-            languageDropdown.options.Add(new TMP_Dropdown.OptionData("Português"));
+            languageDropdown.options.Add(new TMP_Dropdown.OptionData("Portuguese"));
 
             // Estado inicial a partir do SoundColector
             var lang = SoundColector.Instance.voiceLanguage;
