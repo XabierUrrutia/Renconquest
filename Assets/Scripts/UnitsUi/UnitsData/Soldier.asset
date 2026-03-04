@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5e9f53adf4cb744b112afd47dea7f6, type: 3}
+  m_Name: Soldier
+  m_EditorClassIdentifier: 
+  buildingName: Soldier
+  buildingSprite: {fileID: -297889531, guid: b855fa8ba99e79642881a66b53658cb1, type: 3}
+  buildingPrefab: {fileID: 6345127346883322234, guid: 462e604a0087131468f7332b8b031e98, type: 3}
+  cost: 75
+  buildTime: 1
+  gridSize: {x: 1, y: 1}

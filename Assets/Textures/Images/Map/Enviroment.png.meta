@@ -1,0 +1,277 @@
+fileFormatVersion: 2
+guid: 0c071680b6dc74546987e059c0836fb6
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 50
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Enviroment_0
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 275
+        width: 66
+        height: 40
+      alignment: 9
+      pivot: {x: 0.4624759, y: 0.7313606}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c8ac3c1849e9134b91912f553336c53
+      internalID: 311554117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enviroment_1
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 194
+        width: 50
+        height: 75
+      alignment: 9
+      pivot: {x: 0.52466357, y: 0.117125854}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0445d8c30a6465a4d9fe4489e92eb38e
+      internalID: -547331641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enviroment_2
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 194
+        width: 50
+        height: 75
+      alignment: 9
+      pivot: {x: 0.42766845, y: 0.117243856}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d19238de23c88349b4ec2891a8175e6
+      internalID: -1593884865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enviroment_3
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 275
+        width: 66
+        height: 40
+      alignment: 9
+      pivot: {x: 0.4624759, y: 0.7313606}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 097b1e0ca181ce34298ba0d05e60d678
+      internalID: 898529013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enviroment_4
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 275
+        width: 66
+        height: 40
+      alignment: 9
+      pivot: {x: 0.4624759, y: 0.7313606}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 893e8b19ab09af14199767b5f965dd52
+      internalID: -587866864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Enviroment_0: 311554117
+      Enviroment_1: -547331641
+      Enviroment_2: -1593884865
+      Enviroment_3: 898529013
+      Enviroment_4: -587866864
+      enviroment and soldiers_0: 1781082014
+      enviroment and soldiers_1: 45207061
+      enviroment and soldiers_10: -996765286
+      enviroment and soldiers_11: -1579172448
+      enviroment and soldiers_12: -1658781128
+      enviroment and soldiers_13: 627309513
+      enviroment and soldiers_14: -1732657989
+      enviroment and soldiers_15: -988648658
+      enviroment and soldiers_16: 111214350
+      enviroment and soldiers_17: 4032545
+      enviroment and soldiers_18: 1451871892
+      enviroment and soldiers_19: -1527834256
+      enviroment and soldiers_2: 476376009
+      enviroment and soldiers_20: -980759751
+      enviroment and soldiers_21: 1894435011
+      enviroment and soldiers_22: 248128282
+      enviroment and soldiers_23: 1181508458
+      enviroment and soldiers_24: -1990608756
+      enviroment and soldiers_25: 1820621907
+      enviroment and soldiers_26: 130866632
+      enviroment and soldiers_27: -1533805471
+      enviroment and soldiers_28: 524564662
+      enviroment and soldiers_29: 77573794
+      enviroment and soldiers_3: -1675413397
+      enviroment and soldiers_30: -428411870
+      enviroment and soldiers_31: 1500428626
+      enviroment and soldiers_32: -264823802
+      enviroment and soldiers_33: 1035942470
+      enviroment and soldiers_34: 2077714169
+      enviroment and soldiers_35: 421063051
+      enviroment and soldiers_36: -133736522
+      enviroment and soldiers_37: -1114286364
+      enviroment and soldiers_38: 1322381291
+      enviroment and soldiers_39: 9976813
+      enviroment and soldiers_4: -1128656789
+      enviroment and soldiers_5: -204712283
+      enviroment and soldiers_6: 2004603549
+      enviroment and soldiers_7: 768375120
+      enviroment and soldiers_8: -87643458
+      enviroment and soldiers_9: 1391082748
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Interface/MainMenu.unity
+    guid: 79129a040b0b92a408d0a09a3bd9723a
+  - enabled: 1
+    path: Assets/Scenes/Interface/ChoseOptionsMenu.unity
+    guid: 57e6fc2fd8c21a14294f0ed6868bbda1
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal.unity
+    guid: 316404c692a93684199279ff6b09bba7
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/second map.unity
+    guid: 9c323c6084506b54f93805a6c0246303
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/first map.unity
+    guid: 702c24f553e2bdd4eb2584190c9dccc6
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/third map.unity
+    guid: 40a8ab6066afe384f8a2766af2b8dfd4
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial.unity
+    guid: 92b874f13261656469616fa217fe2dd5
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial 1.unity
+    guid: a05c95e24cc3a144ab4dba8b4dcb64e4
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial 2.unity
+    guid: 5b21c354dbde98c41a9873f7ade31b60
+  - enabled: 1
+    path: Assets/Scenes/Interface/Game Over.unity
+    guid: 2670b7d491cbd824b9a519b51bf6fa1b
+  - enabled: 1
+    path: Assets/Scenes/Interface/ControlsMenu.unity
+    guid: a908b6c50455961429c04b469d55df7a
+  - enabled: 1
+    path: Assets/Scenes/Interface/SettingsMenu.unity
+    guid: 61dae89075222694cae56f407178cb2c
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 6acfcb1027956684b89346f813045ac3, type: 3}
