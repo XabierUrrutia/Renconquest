@@ -1,10 +1,6 @@
 # RECONQUEST
 
 <p align="center">
-  <img src="Assets/Logo/logo.png" alt="Reconquest Logo" width="200"/>
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/Motor-Unity%206-black?style=flat-square&logo=unity"/>
   <img src="https://img.shields.io/badge/Lenguaje-C%23-239120?style=flat-square&logo=csharp"/>
   <img src="https://img.shields.io/badge/Plataforma-Windows%2064bit-0078D6?style=flat-square&logo=windows"/>
