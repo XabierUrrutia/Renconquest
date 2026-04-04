@@ -14,13 +14,15 @@ public class Interface_Buttons : MonoBehaviour
 
     void Start()
     {
-        // SEGURIDAD: Si iniciamos y solo hay 1 escena cargada, forzamos el reset.
-        // Esto arregla bloqueos si paraste el juego a medias en el editor.
         if (SceneManager.sceneCount == 1)
         {
             optionsOpen = false;
             Time.timeScale = 1f;
         }
+
+        // Si estamos en el MainMenu, limpiar historial siempre
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            sceneHistory.Clear();
     }
 
     // ------------------------------------------------------------------------
@@ -87,6 +89,7 @@ public class Interface_Buttons : MonoBehaviour
 
     public void GoBack()
     {
+        Debug.Log("Historial: " + string.Join(", ", sceneHistory));
         SoundColector.Instance?.PlayUiClick();
 
         // CASO 1: Estamos en modo "Menú Flotante" (Jugando + Opciones abiertas)
@@ -113,11 +116,12 @@ public class Interface_Buttons : MonoBehaviour
         {
             sceneHistory.Pop();
             int previousSceneIndex = sceneHistory.Peek();
+            if (previousSceneIndex == 0) sceneHistory.Clear();
             SceneManager.LoadScene(previousSceneIndex);
         }
         else
         {
-            // Si no hay historial, volver al menú principal por defecto
+            sceneHistory.Clear();
             SceneManager.LoadScene(0);
         }
     }
@@ -144,15 +148,22 @@ public class Interface_Buttons : MonoBehaviour
 
     // Funciones "puente" para tus botones antiguos
     public void GoToOptionsFromGame() => OpenAdditiveMenu(1);
-    public void GoToMainMenu() { SoundColector.Instance?.PlayMenuMusic(); LoadSceneAndSave(0); }
-    public void GotoGame() => LoadSceneAndSave(2);
-    public void GoToMap()
+    public void GoToMainMenu()
     {
-        Time.timeScale = 1f;
-        LoadSceneAndSave(2);
+        SoundColector.Instance?.PlayMenuMusic();
+        sceneHistory.Clear(); // Limpiar historial al volver al inicio
+        LoadSceneAndSave(0);
     }
+    public void GotoGame() => LoadSceneAndSave(2);
+    public void GoToMap() => LoadSceneAndSave(2);
     public void SecondLevel() => LoadSceneAndSave(3);
-    public void GotoControlsMenu() => LoadSceneAndSave(10);
+    public void GotoControlsMenu()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            LoadSceneAndSave(10);
+        else
+            OpenAdditiveMenu(10);
+    }
     public void GoInGameSettings() => LoadSceneAndSave(2);
     public void GoTutorial1() => LoadSceneAndSave(6);
     public void GoToLevel1()

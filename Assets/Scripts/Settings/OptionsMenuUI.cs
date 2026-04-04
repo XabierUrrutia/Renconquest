@@ -100,17 +100,15 @@ public class OptionsMenuUI : MonoBehaviour
             muteAllToggle.onValueChanged.AddListener(OnMuteAllChanged);
         }
 
-        // se estiver muteAll ligado, cache e força UI coerente
         if (muteAllToggle != null && muteAllToggle.isOn)
         {
-            prevMusic = Mathf.Max(0.0001f, (musicVolumeSlider != null ? musicVolumeSlider.value : prevMusic));
-            prevSfx = Mathf.Max(0.0001f, (sfxVolumeSlider != null ? sfxVolumeSlider.value : prevSfx));
-            prevVoice = Mathf.Max(0.0001f, (voiceVolumeSlider != null ? voiceVolumeSlider.value : prevVoice));
-
+            // Leer previos guardados en PlayerPrefs en vez del slider (que está a 0)
+            prevMusic = Mathf.Max(0.0001f, PlayerPrefs.GetFloat("audio_prevMusicVolume", 0.7f));
+            prevSfx = Mathf.Max(0.0001f, PlayerPrefs.GetFloat("audio_prevSfxVolume", 1f));
+            prevVoice = Mathf.Max(0.0001f, PlayerPrefs.GetFloat("audio_prevVoiceVolume", 1f));
             if (musicVolumeSlider != null) musicVolumeSlider.value = 0f;
             if (sfxVolumeSlider != null) sfxVolumeSlider.value = 0f;
             if (voiceVolumeSlider != null) voiceVolumeSlider.value = 0f;
-
             if (muteMusicToggle != null) muteMusicToggle.isOn = true;
             if (muteSfxToggle != null) muteSfxToggle.isOn = true;
             if (muteVoiceToggle != null) muteVoiceToggle.isOn = true;

@@ -58,6 +58,10 @@ public class SoundColector : MonoBehaviour
     private const string PrefKey_AIVoiceGender = "audio_aiVoiceGender";
     private const string PrefKey_AIGenderFollowsUnits = "audio_aiGenderFollowsUnits";
 
+    private const string PrefKey_PrevMusicVolume = "audio_prevMusicVolume";
+    private const string PrefKey_PrevSfxVolume = "audio_prevSfxVolume";
+    private const string PrefKey_PrevVoiceVolume = "audio_prevVoiceVolume";
+
     [Header("Voz - Speed (só VOZ)")]
     [Range(0.5f, 2f)] public float voiceSpeed = 1.0f;
 
@@ -633,11 +637,29 @@ public class SoundColector : MonoBehaviour
 
         if (muted)
         {
+            // Guardar volúmenes previos ANTES de silenciar
+            PlayerPrefs.SetFloat(PrefKey_PrevMusicVolume, musicVolume > 0.0001f ? musicVolume : 0.7f);
+            PlayerPrefs.SetFloat(PrefKey_PrevSfxVolume, sfxVolume > 0.0001f ? sfxVolume : 1f);
+            PlayerPrefs.SetFloat(PrefKey_PrevVoiceVolume, voiceVolume > 0.0001f ? voiceVolume : 1f);
+            PlayerPrefs.Save();
+
             if (musicSource != null) musicSource.Stop();
             if (voiceSource != null) voiceSource.Stop();
-        }
 
-        ApplyMixerVolumes();
+            ApplyMixerVolumes();
+        }
+        else
+        {
+            ApplyMixerVolumes();
+
+            // Forzar reanudar música ignorando el check de estado igual
+            if (musicSource != null && !musicSource.isPlaying)
+            {
+                MusicState stateToRestore = currentMusicState;
+                currentMusicState = MusicState.None; // Reset para que SetMusicState no ignore la llamada
+                SetMusicState(stateToRestore);
+            }
+        }
     }
 
     public void SetVoiceLanguage(VoiceLanguage lang)
