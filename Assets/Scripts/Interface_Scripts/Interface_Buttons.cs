@@ -146,7 +146,11 @@ public class Interface_Buttons : MonoBehaviour
     public void GoToOptionsFromGame() => OpenAdditiveMenu(1);
     public void GoToMainMenu() { SoundColector.Instance?.PlayMenuMusic(); LoadSceneAndSave(0); }
     public void GotoGame() => LoadSceneAndSave(2);
-    public void GoToMap() => LoadSceneAndSave(2);
+    public void GoToMap()
+    {
+        Time.timeScale = 1f;
+        LoadSceneAndSave(2);
+    }
     public void SecondLevel() => LoadSceneAndSave(3);
     public void GotoControlsMenu() => LoadSceneAndSave(10);
     public void GoInGameSettings() => LoadSceneAndSave(2);

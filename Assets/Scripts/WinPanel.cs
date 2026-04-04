@@ -3,8 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class WinPanel : MonoBehaviour
 {
-    [Tooltip("Panel UI que mostra WIN (inactive por default)")]
+    [Tooltip("Panel UI que muestra WIN (inactive por default)")]
     public GameObject winPanelUI;
+
+    [Tooltip("Nombre de la escena de selección de niveles")]
+    public string levelSelectScene = "Portugal";
 
     private bool _shown = false;
 
@@ -16,12 +19,11 @@ public class WinPanel : MonoBehaviour
 
     public void ShowWin()
     {
-        SoundColector.Instance?.PlayUiPanelOpen();
-        SoundColector.Instance?.PlayVictoryMusic();
-
-
         if (_shown) return;
         _shown = true;
+
+        SoundColector.Instance?.PlayUiPanelOpen();
+        SoundColector.Instance?.PlayVictoryMusic();
 
         if (winPanelUI != null)
             winPanelUI.SetActive(true);
@@ -30,28 +32,22 @@ public class WinPanel : MonoBehaviour
 
         if (LevelManager.Instance == null)
         {
-            Debug.LogWarning("[WinPanel] LevelManager não encontrado. Não foi possível marcar/desbloquear níveis.");
+            Debug.LogWarning("[WinPanel] LevelManager no encontrado.");
             return;
         }
 
-        // Tentar obter o nível atual de forma robusta:
         int lvl = LevelManager.Instance.CurrentLevel;
         if (lvl <= 0)
         {
             string sceneName = SceneManager.GetActiveScene().name;
             lvl = LevelManager.Instance.GetLevelIndexByScene(sceneName);
-            Debug.Log($"[WinPanel] CurrentLevel indefinido. Determinado por cena: '{sceneName}' -> nível {lvl}");
         }
 
         if (lvl > 0)
         {
             LevelManager.Instance.MarkLevelCompleted(lvl);
             LevelManager.Instance.UnlockNextLevel(lvl);
-            Debug.Log($"[WinPanel] Nível {lvl} concluído. Próximo desbloqueado (se houver).");
-        }
-        else
-        {
-            Debug.LogWarning("[WinPanel] Não foi possível determinar o nível atual para marcar/desbloquear.");
+            Debug.Log($"[WinPanel] Nivel {lvl} completado. Siguiente desbloqueado.");
         }
     }
 
@@ -64,5 +60,13 @@ public class WinPanel : MonoBehaviour
             winPanelUI.SetActive(false);
 
         Time.timeScale = 1f;
+    }
+
+    // Botón MAP -> volver a selección de niveles
+    public void GoToLevelSelect()
+    {
+        Time.timeScale = 1f;
+        SoundColector.Instance?.PlayUiClick();
+        SceneManager.LoadScene(2); // Portugal es índice 2
     }
 }

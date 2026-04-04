@@ -13,17 +13,26 @@ public class EdificioInfo2D : MonoBehaviour
 
     [Header("Tooltip Isométrico")]
     public GameObject tooltipPrefab;
-    public Vector3 offset = new Vector3(0, -2f, 0); // Offset en el mundo isométrico
+    public Vector3 offset = new Vector3(0, -2f, 0);
     public float escala = 0.015f;
+
+    [Header("Texturas de Estado")]
+    [Tooltip("SpriteRenderer que se pondrá encima del Tilemap para mostrar el estado")]
+    public SpriteRenderer estadoRenderer;
+    [Tooltip("Sprite cuando el nivel está bloqueado")]
+    public Sprite spriteConCandado;
+    [Tooltip("Sprite cuando el nivel está desbloqueado")]
+    public Sprite spriteSinCandado;
+    [Tooltip("Sprite cuando el nivel está completado (opcional)")]
+    public Sprite spriteCompletado;
 
     private GameObject miTooltip;
     private Camera camara;
+
     [Header("Cutscene Video (opcional)")]
     [SerializeField] private VideoOverlayPlayer overlay;
-
     [SerializeField] private float skipInputDelay = 0.15f;
     private float skipBlockUntil = 0f;
-
 
     void Start()
     {
@@ -31,22 +40,43 @@ public class EdificioInfo2D : MonoBehaviour
         if (!overlay) overlay = FindObjectOfType<VideoOverlayPlayer>();
 
         if (tooltipPrefab != null)
-        {
             CrearTooltipIsometrico();
-        }
+
+        ActualizarSprite();
+    }
+
+    // Llamado cada vez que se activa el GameObject (por si vuelves del nivel)
+    void OnEnable()
+    {
+        ActualizarSprite();
+    }
+
+    void ActualizarSprite()
+    {
+        if (estadoRenderer == null || LevelManager.Instance == null) return;
+
+        int level = LevelManager.Instance.GetLevelIndexByScene(nombreEscenaDestino);
+        if (level == 0) return; // Esta escena no es un nivel gestionado
+
+        bool unlocked = LevelManager.Instance.IsUnlocked(level);
+        bool completed = LevelManager.Instance.IsCompleted(level);
+
+        if (completed && spriteCompletado != null)
+            estadoRenderer.sprite = spriteCompletado;
+        else if (unlocked && spriteSinCandado != null)
+            estadoRenderer.sprite = spriteSinCandado;
+        else if (!unlocked && spriteConCandado != null)
+            estadoRenderer.sprite = spriteConCandado;
     }
 
     void CrearTooltipIsometrico()
     {
-        // Crear tooltip como hijo del canvas o del mundo, no del edificio
         miTooltip = Instantiate(tooltipPrefab);
 
-        // Configurar canvas para mundo isométrico
         Canvas canvas = miTooltip.GetComponent<Canvas>();
         if (canvas != null)
         {
             canvas.renderMode = RenderMode.WorldSpace;
-            // Ajustar el tamaño del RectTransform para isométrico
             RectTransform rect = canvas.GetComponent<RectTransform>();
             rect.sizeDelta = new Vector2(300, 100);
         }
@@ -57,28 +87,20 @@ public class EdificioInfo2D : MonoBehaviour
 
     void Update()
     {
-        // Actualizar posición del tooltip para que siga al edificio en isométrico
         if (miTooltip != null && miTooltip.activeInHierarchy)
-        {
             ActualizarPosicionIsometrica();
-        }
     }
 
     void ActualizarPosicionIsometrica()
     {
         if (miTooltip == null) return;
 
-        // Posicionar el tooltip en el mundo isométrico
         Vector3 posicionMundo = transform.position + offset;
         miTooltip.transform.position = posicionMundo;
 
-        // Mantener el tooltip mirando a la cámara isométrica
         if (camara != null)
-        {
             miTooltip.transform.rotation = camara.transform.rotation;
-        }
 
-        // Ajustar escala
         miTooltip.transform.localScale = Vector3.one * escala;
     }
 
@@ -108,28 +130,24 @@ public class EdificioInfo2D : MonoBehaviour
     void OnMouseExit()
     {
         if (miTooltip != null)
-        {
             miTooltip.SetActive(false);
-        }
     }
 
     void OnMouseDown()
     {
         if (string.IsNullOrEmpty(nombreEscenaDestino)) return;
 
-        // Se houver LevelManager, verificar se a cena está desbloqueada
         if (LevelManager.Instance != null)
         {
             bool unlocked = LevelManager.Instance.IsSceneUnlocked(nombreEscenaDestino);
             if (!unlocked)
             {
-                Debug.Log($"[EdificioInfo2D] Level '{nombreEscenaDestino}' bloqued. Complete the previus level to play.");
+                Debug.Log($"[EdificioInfo2D] Level '{nombreEscenaDestino}' bloqueado.");
                 ShowLockedTooltip();
                 return;
             }
         }
 
-        // 🔹 Resetar dinheiro sempre que se entra num nível por este edifício
         if (MoneyManager.Instance != null)
             MoneyManager.Instance.ResetMoney();
 
@@ -145,9 +163,7 @@ public class EdificioInfo2D : MonoBehaviour
         foreach (TextMeshProUGUI texto in textosTMP)
         {
             if (texto.name.Contains("Desc") || texto.gameObject.name.Contains("Desc"))
-            {
-                texto.text = "Bloqued. Complete the previus level first.";
-            }
+                texto.text = "Bloqueado. Completa el nivel anterior primero.";
         }
 
         miTooltip.SetActive(true);
@@ -166,12 +182,9 @@ public class EdificioInfo2D : MonoBehaviour
     void OnDestroy()
     {
         if (miTooltip != null)
-        {
             Destroy(miTooltip);
-        }
     }
 
-    // Método para debug visual en el Editor
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
