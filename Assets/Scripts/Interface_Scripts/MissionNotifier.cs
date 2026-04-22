@@ -5,41 +5,43 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// Componente para mostrar missões/objetivos na tela durante o jogo.
-/// Coloque este script num prefab UI (apenas UI) e atribua as referências no Inspector.
-/// Use `EnqueueMission`, `ShowMission`, `CompleteCurrentMission` e `OnBuildingConquered` via código para controlar as missões.
+/// Componente para mostrar missï¿½es/objetivos na tela durante o jogo.
+/// Coloque este script num prefab UI (apenas UI) e atribua as referï¿½ncias no Inspector.
+/// Use `EnqueueMission`, `ShowMission`, `CompleteCurrentMission` e `OnBuildingConquered` via cï¿½digo para controlar as missï¿½es.
 /// </summary>
 public class MissionNotifier : MonoBehaviour
 {
-    // Singleton de conveniência (opcional — facilita chamadas de outros scripts)
+    // Singleton de conveniï¿½ncia (opcional ï¿½ facilita chamadas de outros scripts)
     public static MissionNotifier Instance { get; private set; }
 
-    [Header("Referências de UI")]
+    [Header("Referï¿½ncias de UI")]
     public GameObject panelRoot;                // root do painel (active/inactive)
-    public TextMeshProUGUI titleText;           // título da missão
-    public TextMeshProUGUI descriptionText;     // descrição/objetivo
-    public Button nextButton;                   // avança para a próxima missão / fecha
+    public TextMeshProUGUI titleText;           // tï¿½tulo da missï¿½o
+    public TextMeshProUGUI descriptionText;     // descriï¿½ï¿½o/objetivo
+    public Button nextButton;                   // avanï¿½a para a prï¿½xima missï¿½o / fecha
     public Button closeButton;                  // fecha o painel manualmente
-    public Slider progressBar;                  // opcional: barra de progresso para a missão
+    public Slider progressBar;                  // opcional: barra de progresso para a missï¿½o
 
     [Header("Comportamento")]
-    public float autoHideSeconds = 5f;          // tempo até esconder automaticamente (0 = nunca)
-    public bool showNextAutomatically = true;   // mostra próxima missão automaticamente ao completar
-    public bool hideOnComplete = true;          // esconder painel ao completar a missão
+    public float autoHideSeconds = 5f;          // tempo atï¿½ esconder automaticamente (0 = nunca)
+    public bool showNextAutomatically = true;   // mostra prï¿½xima missï¿½o automaticamente ao completar
+    public bool hideOnComplete = true;          // esconder painel ao completar a missï¿½o
 
-    [Header("Auto-show (início do jogo)")]
-    public bool showOnStart = true;             // mostrar missões definidas no inspetor ao arrancar
+    [Header("Auto-show (inï¿½cio do jogo)")]
+    public bool showOnStart = true;
+    [Tooltip("Si estÃ¡ activo, encola las misiones al inicio pero NO las muestra hasta que una zona las dispare con 'Use Next From Queue'.")]
+    public bool enqueueOnStartWithoutShowing = false;
     [TextArea] public string initialMissionTitle;
     [TextArea] public string initialMissionDescription;
 
-    [Header("Missões editáveis no Inspector")]
+    [Header("Missï¿½es editï¿½veis no Inspector")]
     public List<MissionEntry> inspectorMissions = new List<MissionEntry>();
 
     [Header("Templates")]
-    [Tooltip("Template para título quando um edifício é conquistado. Use {0} para o nome do edifício.")]
-    public string conquestTitleTemplate = "Edifício conquistado: {0}";
-    [Tooltip("Template para descrição quando um edifício é conquistado. Use {0} para o nome do edifício.")]
-    [TextArea] public string conquestDescriptionTemplate = "Você conquistou {0}. Recolha recursos e defenda a posição.";
+    [Tooltip("Template para tï¿½tulo quando um edifï¿½cio ï¿½ conquistado. Use {0} para o nome do edifï¿½cio.")]
+    public string conquestTitleTemplate = "Edifï¿½cio conquistado: {0}";
+    [Tooltip("Template para descriï¿½ï¿½o quando um edifï¿½cio ï¿½ conquistado. Use {0} para o nome do edifï¿½cio.")]
+    [TextArea] public string conquestDescriptionTemplate = "Vocï¿½ conquistou {0}. Recolha recursos e defenda a posiï¿½ï¿½o.";
 
     private Queue<Mission> queue = new Queue<Mission>();
     private Mission? current;
@@ -70,10 +72,10 @@ public class MissionNotifier : MonoBehaviour
 
     void Awake()
     {
-        // Singleton (não destrua se já existir outra instância)
+        // Singleton (nï¿½o destrua se jï¿½ existir outra instï¿½ncia)
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("[MissionNotifier] Mais de uma instância encontrada. Esta instância será destruída.");
+            Debug.LogWarning("[MissionNotifier] Mais de uma instï¿½ncia encontrada. Esta instï¿½ncia serï¿½ destruï¿½da.");
             Destroy(gameObject);
             return;
         }
@@ -107,15 +109,26 @@ public class MissionNotifier : MonoBehaviour
 
     void Start()
     {
-        // Se houver missões definidas na lista do Inspector e showOnStart = true, enfileira-as
         if (showOnStart && inspectorMissions != null && inspectorMissions.Count > 0)
         {
-            foreach (var me in inspectorMissions)
-                EnqueueMission(new Mission(me.title, me.description, me.optional));
+            if (enqueueOnStartWithoutShowing)
+            {
+                // Mete todas en la cola sin mostrar ninguna â€” las zonas las disparan
+                foreach (var me in inspectorMissions)
+                    queue.Enqueue(new Mission(me.title, me.description, me.optional));
+            }
+            else
+            {
+                foreach (var me in inspectorMissions)
+                    EnqueueMission(new Mission(me.title, me.description, me.optional));
+            }
         }
         else if (showOnStart && !string.IsNullOrWhiteSpace(initialMissionTitle))
         {
-            EnqueueMission(new Mission(initialMissionTitle, initialMissionDescription, false));
+            if (enqueueOnStartWithoutShowing)
+                queue.Enqueue(new Mission(initialMissionTitle, initialMissionDescription, false));
+            else
+                EnqueueMission(new Mission(initialMissionTitle, initialMissionDescription, false));
         }
     }
 
@@ -128,7 +141,7 @@ public class MissionNotifier : MonoBehaviour
 
     // Public API --------------------------------------------------------
 
-    // Chamado por outros scripts quando um edifício é conquistado.
+    // Chamado por outros scripts quando um edifï¿½cio ï¿½ conquistado.
     // Ex.: BuildingOwnership deve chamar: MissionNotifier.Instance.OnBuildingConquered(gameObject.name);
     public void OnBuildingConquered(string buildingName, bool showImmediately = true)
     {
@@ -140,7 +153,7 @@ public class MissionNotifier : MonoBehaviour
             EnqueueMission(title, desc, false);
     }
 
-    // Enfileira uma missão; se não houver missão ativa, mostra-a
+    // Enfileira uma missï¿½o; se nï¿½o houver missï¿½o ativa, mostra-a
     public void EnqueueMission(string title, string description, bool optional = false)
     {
         EnqueueMission(new Mission(title, description, optional));
@@ -153,14 +166,14 @@ public class MissionNotifier : MonoBehaviour
             ShowNextFromQueue();
     }
 
-    // Mostra imediatamente uma missão (prioriza sobre a atual)
+    // Mostra imediatamente uma missï¿½o (prioriza sobre a atual)
     public void ShowMission(string title, string description, bool optional = false)
     {
         current = new Mission(title, description, optional);
         UpdateUIForCurrent();
     }
 
-    // Marca a missão atual como concluída e avança
+    // Marca a missï¿½o atual como concluï¿½da e avanï¿½a
     public void CompleteCurrentMission()
     {
         if (current == null) return;
@@ -175,7 +188,7 @@ public class MissionNotifier : MonoBehaviour
             HidePanel();
     }
 
-    // Remove todas as missões pendentes e oculta
+    // Remove todas as missï¿½es pendentes e oculta
     public void ClearAll()
     {
         queue.Clear();
@@ -183,7 +196,7 @@ public class MissionNotifier : MonoBehaviour
         HidePanel();
     }
 
-    // Atualiza o progresso visual da missão atual (0..1)
+    // Atualiza o progresso visual da missï¿½o atual (0..1)
     public void SetProgress(float normalized)
     {
         currentProgress = Mathf.Clamp01(normalized);
@@ -217,7 +230,7 @@ public class MissionNotifier : MonoBehaviour
         if (titleText != null) titleText.text = current.Value.title;
         if (descriptionText != null) descriptionText.text = current.Value.description;
 
-        // reset progress visual quando uma missão nova aparece
+        // reset progress visual quando uma missï¿½o nova aparece
         currentProgress = 0f;
         if (progressBar != null) progressBar.value = currentProgress;
 
@@ -234,8 +247,13 @@ public class MissionNotifier : MonoBehaviour
     private IEnumerator AutoHideCoroutine(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        HidePanel();
         autoHideCoroutine = null;
+        current = null;
+
+        if (showNextAutomatically && queue.Count > 0)
+            ShowNextFromQueue();
+        else
+            HidePanel();
     }
 
     private void HidePanel()
@@ -250,8 +268,34 @@ public class MissionNotifier : MonoBehaviour
 
     private void OnNextClicked()
     {
-        // Avança sempre para a próxima missão quando o jogador clica em Next
+        // Avanï¿½a sempre para a prï¿½xima missï¿½o quando o jogador clica em Next
         CompleteCurrentMission();
+    }
+
+    // Muestra inmediatamente interrumpiendo la cola actual
+    public void ShowMissionPriority(string title, string description)
+    {
+        if (autoHideCoroutine != null)
+        {
+            StopCoroutine(autoHideCoroutine);
+            autoHideCoroutine = null;
+        }
+        current = new Mission(title, description, false);
+        UpdateUIForCurrent();
+    }
+
+    // Saca la siguiente misiÃ³n de la cola y la muestra â€” llamado por MissionTriggerZone
+    public void TriggerNextQueued()
+    {
+        if (queue.Count == 0) return;
+
+        if (autoHideCoroutine != null)
+        {
+            StopCoroutine(autoHideCoroutine);
+            autoHideCoroutine = null;
+        }
+        current = null;
+        ShowNextFromQueue();
     }
 
     // Query helpers ----------------------------------------------------

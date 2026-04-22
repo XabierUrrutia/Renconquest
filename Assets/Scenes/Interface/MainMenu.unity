@@ -1826,7 +1826,6 @@ GameObject:
   - component: {fileID: 1342060532}
   - component: {fileID: 1342060531}
   - component: {fileID: 1342060530}
-  - component: {fileID: 1342060534}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1924,18 +1923,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1342060534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1342060529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 885d5ac872250814ea379819087cc773, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1436052020
 GameObject:
   m_ObjectHideFlags: 0
@@ -2507,7 +2494,7 @@ MonoBehaviour:
   unitFemaleChance: 0.35
   aiVoiceGender: 1
   aiGenderFollowsUnits: 0
-  masterMixer: {fileID: 24100000, guid: cf9b491ca6eb63545b199c816d6551c9, type: 2}
+  masterMixer: {fileID: 0}
   musicVolumeParameter: MusicVolume
   sfxVolumeParameter: SfxVolume
   voiceVolumeParameter: VoiceVolume

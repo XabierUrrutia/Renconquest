@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-/// <summary>
-/// Alterna entre dois sprites em um Tilemap para animar água (simples ondulação).
-/// - Anexe ao GameObject que contém o Tilemap (ou atribua o Tilemap no Inspector).
-/// - Pode filtrar pelas tiles originais (waterTileReference) ou detectar por sprite.
-/// </summary>
 [DisallowMultipleComponent]
 public class TilemapWaterAnimator : MonoBehaviour
 {
     [Header("Tilemap")]
-    public Tilemap tilemap; // se vazio, tenta GetComponent<Tilemap>()
+    public Tilemap tilemap;
 
     [Header("Detecção de água")]
-    [Tooltip("Opcional: TileBase de referência para identificar tiles de água. Se vazio, detecta por spriteA/spriteB.")]
     public TileBase waterTileReference;
 
     [Header("Sprites (frames)")]
@@ -23,16 +17,11 @@ public class TilemapWaterAnimator : MonoBehaviour
     public Sprite spriteB;
 
     [Header("Timing")]
-    [Tooltip("Intervalo entre trocas (segundos) — ciclo completo = interval * 2")]
     public float interval = 0.5f;
 
-    [Header("Desincronizar")]
-    [Tooltip("Se true, metade das células alternam em fase oposta (efeito mais natural)")]
-    public bool randomPhase = true;
-
-    // runtime
-    private List<Vector3Int> waterCells = new List<Vector3Int>();
-    private List<bool> invertPhase = new List<bool>();
+    private Vector3Int[] waterCells;
+    private TileBase[] framesA;
+    private TileBase[] framesB;
     private Dictionary<Vector3Int, TileBase> originalTiles = new Dictionary<Vector3Int, TileBase>();
     private Tile tileA;
     private Tile tileB;
@@ -45,18 +34,11 @@ public class TilemapWaterAnimator : MonoBehaviour
 
     void OnEnable()
     {
-        if (tilemap == null)
+        if (tilemap == null || spriteA == null || spriteB == null)
         {
-            Debug.LogWarning("TilemapWaterAnimator: Tilemap não atribuído e não encontrado no GameObject.");
+            Debug.LogWarning("TilemapWaterAnimator: faltan referencias.");
             return;
         }
-
-        if (spriteA == null || spriteB == null)
-        {
-            Debug.LogWarning("TilemapWaterAnimator: sprites não atribuídos. Cancela animação.");
-            return;
-        }
-
         BuildTiles();
         CollectWaterCells();
         StartAnimation();
@@ -74,7 +56,6 @@ public class TilemapWaterAnimator : MonoBehaviour
         tileA = ScriptableObject.CreateInstance<Tile>();
         tileA.sprite = spriteA;
         tileA.color = Color.white;
-
         tileB = ScriptableObject.CreateInstance<Tile>();
         tileB.sprite = spriteB;
         tileB.color = Color.white;
@@ -90,28 +71,24 @@ public class TilemapWaterAnimator : MonoBehaviour
 
     void CollectWaterCells()
     {
-        waterCells.Clear();
-        invertPhase.Clear();
         originalTiles.Clear();
+        List<Vector3Int> found = new List<Vector3Int>();
 
         BoundsInt bounds = tilemap.cellBounds;
-        // Percorre todas as células na bounding box do Tilemap
-        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+        int width = bounds.size.x;
+
+        for (int y = 0; y < bounds.size.y; y++)
         {
-            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            for (int x = 0; x < bounds.size.x; x++)
             {
-                Vector3Int cell = new Vector3Int(x, y, 0);
-                TileBase t = tilemap.GetTile(cell);
+                TileBase t = allTiles[x + y * width];
                 if (t == null) continue;
 
                 bool isWater = false;
-                if (waterTileReference != null)
-                {
-                    if (t == waterTileReference) isWater = true;
-                }
+                if (waterTileReference != null) isWater = (t == waterTileReference);
                 else
                 {
-                    // detecta por sprite (se tile for Tile)
                     Tile tile = t as Tile;
                     if (tile != null && (tile.sprite == spriteA || tile.sprite == spriteB))
                         isWater = true;
@@ -119,15 +96,24 @@ public class TilemapWaterAnimator : MonoBehaviour
 
                 if (isWater)
                 {
-                    waterCells.Add(cell);
+                    Vector3Int cell = new Vector3Int(bounds.xMin + x, bounds.yMin + y, 0);
+                    found.Add(cell);
                     originalTiles[cell] = t;
-                    invertPhase.Add(randomPhase && (Random.value > 0.5f));
                 }
             }
         }
 
-        if (waterCells.Count == 0)
-            Debug.LogWarning("TilemapWaterAnimator: não encontrou células de água com as condições definidas.");
+        waterCells = found.ToArray();
+        framesA = new TileBase[waterCells.Length];
+        framesB = new TileBase[waterCells.Length];
+        for (int i = 0; i < waterCells.Length; i++)
+        {
+            framesA[i] = tileA;
+            framesB[i] = tileB;
+        }
+
+        if (waterCells.Length == 0)
+            Debug.LogWarning("TilemapWaterAnimator: sin celdas de agua.");
     }
 
     void StartAnimation()
@@ -138,64 +124,30 @@ public class TilemapWaterAnimator : MonoBehaviour
 
     void StopAnimation()
     {
-        if (animRoutine != null)
-        {
-            StopCoroutine(animRoutine);
-            animRoutine = null;
-        }
+        if (animRoutine != null) { StopCoroutine(animRoutine); animRoutine = null; }
     }
 
     IEnumerator AnimateTilesCoroutine()
     {
+        WaitForSeconds wait = new WaitForSeconds(interval);
         bool state = false;
         while (true)
         {
-            // alterna estado
             state = !state;
-
-            for (int i = 0; i < waterCells.Count; i++)
-            {
-                Vector3Int cell = waterCells[i];
-                bool invert = invertPhase[i];
-                bool showA = (state ^ invert); // se true -> spriteA, else spriteB
-                tilemap.SetTile(cell, showA ? tileA : tileB);
-            }
-
-            yield return new WaitForSeconds(interval);
+            tilemap.SetTiles(waterCells, state ? framesA : framesB);
+            yield return wait;
         }
     }
 
     void RestoreOriginalTiles()
     {
-        foreach (var kv in originalTiles)
-        {
-            tilemap.SetTile(kv.Key, kv.Value);
-        }
+        foreach (var kv in originalTiles) tilemap.SetTile(kv.Key, kv.Value);
         originalTiles.Clear();
     }
 
-    // API pública
-    public void StartRipples()
-    {
-        if (animRoutine == null) StartAnimation();
-    }
+    public void StartRipples() { if (animRoutine == null) StartAnimation(); }
+    public void StopRipples() { StopAnimation(); RestoreOriginalTiles(); }
 
-    public void StopRipples()
-    {
-        StopAnimation();
-        RestoreOriginalTiles();
-    }
-
-    // Permite atualizar sprites em runtime
-    public void SetSprites(Sprite a, Sprite b)
-    {
-        spriteA = a;
-        spriteB = b;
-        if (tileA != null) tileA.sprite = spriteA;
-        if (tileB != null) tileB.sprite = spriteB;
-    }
-
-    // Re-coleta células (use se modificares o tilemap em runtime)
     public void Refresh()
     {
         StopAnimation();

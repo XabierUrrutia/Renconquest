@@ -61,6 +61,13 @@ public class TankMovement : MonoBehaviour, ISelectableUnit
         if (selectableUnitComponent != null) selectableUnitComponent.ShowSelection(false);
     }
 
+    public void Detener()
+    {
+        puntosCamino.Clear();
+        moviendose = false;
+        rb.linearVelocity = Vector2.zero;
+    }
+
     // =========================================================
     //              SISTEMA DE INPUT Y RUTA
     // =========================================================

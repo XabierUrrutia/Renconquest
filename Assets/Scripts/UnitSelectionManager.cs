@@ -13,6 +13,11 @@ public class UnitSelectionManager : MonoBehaviour
     public float radioFormacion = 1.5f;
     public bool usarFormacionCircular = true;
 
+    [Header("Detección de Terreno")]
+    public LayerMask capaEdificios;
+    public LayerMask capaAgua;
+    public LayerMask capaWaypointPuente;
+
     [Header("Tweaks de Audio")]
     [Tooltip("Tiempo mínimo entre sonidos de movimiento.")]
     public float intervaloMinSomMovimiento = 0.15f;
@@ -195,13 +200,39 @@ public class UnitSelectionManager : MonoBehaviour
             destino.z = 0;
 
             // Calculamos formaciones
+            // Calculamos formaciones
             Vector3[] destinos = CalcularDestinosDistribuidos(destino, unidadesSeleccionadas.Count);
 
+            // Asignar cada soldado al destino válido más cercano (sin repetir destinos)
+            bool[] destinoUsado = new bool[destinos.Length];
             for (int i = 0; i < unidadesSeleccionadas.Count; i++)
             {
-                if (unidadesSeleccionadas[i] != null)
+                if (unidadesSeleccionadas[i] == null) continue;
+
+                Vector3 posSoldado = unidadesSeleccionadas[i].gameObject.transform.position;
+                int mejorIdx = -1;
+                float menorDistSqr = float.MaxValue;
+
+                for (int j = 0; j < destinos.Length; j++)
                 {
-                    unidadesSeleccionadas[i].MoverADestino(destinos[i]);
+                    if (destinoUsado[j]) continue;
+                    if (!EsPuntoValido(destinos[j])) continue;
+                    float distSqr = ((Vector2)(destinos[j] - posSoldado)).sqrMagnitude;
+                    if (distSqr < menorDistSqr)
+                    {
+                        menorDistSqr = distSqr;
+                        mejorIdx = j;
+                    }
+                }
+
+                if (mejorIdx >= 0)
+                {
+                    destinoUsado[mejorIdx] = true;
+                    unidadesSeleccionadas[i].MoverADestino(destinos[mejorIdx]);
+                }
+                else
+                {
+                    unidadesSeleccionadas[i].Detener();
                 }
             }
 
@@ -391,14 +422,12 @@ public class UnitSelectionManager : MonoBehaviour
         {
             int filas = Mathf.CeilToInt(Mathf.Sqrt(cantidadUnidades));
             int columnas = Mathf.CeilToInt((float)cantidadUnidades / filas);
-
             int index = 0;
             for (int fila = 0; fila < filas; fila++)
             {
                 for (int columna = 0; columna < columnas; columna++)
                 {
                     if (index >= cantidadUnidades) break;
-
                     float x = (columna - (columnas - 1) * 0.5f) * radioFormacion;
                     float y = (fila - (filas - 1) * 0.5f) * radioFormacion;
                     destinos[index] = destinoCentral + new Vector3(x, y, 0);
@@ -408,6 +437,18 @@ public class UnitSelectionManager : MonoBehaviour
         }
 
         return destinos;
+    }
+
+    bool EsPuntoValido(Vector3 punto)
+    {
+        if (capaEdificios != 0 && Physics2D.OverlapCircle(punto, 0.3f, capaEdificios) != null)
+            return false;
+        if (capaAgua != 0 && Physics2D.OverlapCircle(punto, 0.3f, capaAgua) != null)
+        {
+            if (capaWaypointPuente == 0 || Physics2D.OverlapCircle(punto, 0.3f, capaWaypointPuente) == null)
+                return false;
+        }
+        return true;
     }
 
     // ---------------------------------------------------------

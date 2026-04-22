@@ -896,7 +896,6 @@ GameObject:
   - component: {fileID: 5626338546837467521}
   - component: {fileID: 9020389207722166144}
   - component: {fileID: -6913281061539137623}
-  - component: {fileID: 820724833635604278}
   m_Layer: 10
   m_Name: Soldado
   m_TagString: Player
@@ -1023,7 +1022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocidad: 1.5
   distanciaParada: 0.3
-  cooldownClick: 0.7
+  cooldownClick: 2.5
   capaSuelo:
     serializedVersion: 2
     m_Bits: 64
@@ -1033,6 +1032,11 @@ MonoBehaviour:
   capaWaypointPuente:
     serializedVersion: 2
     m_Bits: 8
+  capaWaypoints:
+    serializedVersion: 2
+    m_Bits: 65536
+  radioBusquedaWaypoints: 8
+  radioBusquedaPuente: 20
   frenteDerecha_L: {fileID: -1746700564, guid: b855fa8ba99e79642881a66b53658cb1, type: 3}
   frenteDerecha_R: {fileID: -297889531, guid: b855fa8ba99e79642881a66b53658cb1, type: 3}
   frenteDerecha_Idle: {fileID: -297889531, guid: b855fa8ba99e79642881a66b53658cb1, type: 3}
@@ -1180,7 +1184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7272dd146d0ac4bafcc52df01a4d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visionRadius: 2
+  visionRadius: 2.5
   updateThreshold: 0.1
   forceUpdateInterval: 0.2
 --- !u!114 &-4340466006893484424
@@ -1247,18 +1251,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soyUnaUnidadDe: 0
   costePoblacion: 1
---- !u!114 &820724833635604278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6345127346883322234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b4cdc7484d5ac94b9c232440ed37280, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6694624596917303429
 GameObject:
   m_ObjectHideFlags: 0

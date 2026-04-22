@@ -36,11 +36,11 @@ public class OptionsMenuUI : MonoBehaviour
     private float prevSfx = 1f;
     private float prevVoice = 1f;
 
-    private void Start()
+    private void OnEnable()
     {
         if (SoundColector.Instance == null)
         {
-            Debug.LogWarning("[OptionsMenuUI] SoundColector.Instance é null. Verifica se o objeto SoundColector existe na primeira cena.");
+            Debug.LogWarning("[OptionsMenuUI] SoundColector.Instance é null.");
             return;
         }
 

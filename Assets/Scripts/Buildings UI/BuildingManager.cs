@@ -57,6 +57,8 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<Renderer, Color> previewOriginalColors = new Dictionary<Renderer, Color>();
     private List<Material> previewInstantiatedMaterials = new List<Material>();
 
+
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -79,6 +81,12 @@ public class BuildingManager : MonoBehaviour
         {
             MoneyManager.Instance.ResetMoney();
         }
+    }
+
+    IEnumerator EnableEdificioClickNextFrame(EdificioClick ec)
+    {
+        yield return new WaitForSeconds(0.2f);
+        if (ec != null) ec.enabled = true;
     }
 
     void Update()
@@ -127,13 +135,16 @@ public class BuildingManager : MonoBehaviour
                         // Construir
                         GameObject placed = Instantiate(currentPrefab, previewInstance.transform.position, Quaternion.identity);
                         placed.name = currentPrefab.name;
+
+                        // Deshabilitar EdificioClick temporalmente para evitar click inmediato
+                        EdificioClick ec = placed.GetComponent<EdificioClick>();
+                        if (ec != null) ec.enabled = false;
+                        StartCoroutine(EnableEdificioClickNextFrame(ec));
+
                         StartCoroutine(ConstructBuildingRoutine(placed, selectedBuildingData.buildTime));
 
                         // Terminar
                         CancelPlacing();
-
-                        // NOTA: El GameManager ya revisa automáticamente en el Update.
-                        // No hace falta llamarlo manualmente, pero no da error si lo dejas.
                     }
                     else
                     {
@@ -283,23 +294,41 @@ public class BuildingManager : MonoBehaviour
     {
         overlapping = null;
 
-        // dentro do raio da base
+        // 1. Dentro del radio de la base
         if (militaryBase != null)
         {
-            float d = Vector2.Distance(new Vector2(worldPos.x, worldPos.y), new Vector2(militaryBase.position.x, militaryBase.position.y));
+            float d = Vector2.Distance(new Vector2(worldPos.x, worldPos.y),
+                                       new Vector2(militaryBase.position.x, militaryBase.position.y));
             if (d > buildRadius) return false;
         }
 
-        // Fog of War
+        // 2. Fog of War
         if (fogOfWar != null)
         {
             if (!fogOfWar.IsPositionVisitedOrVisible(worldPos))
-            {
                 return false;
-            }
         }
 
-        // overlap usando bounds do preview
+        // 3. Solo encima del Layer Ground
+        int groundLayer = LayerMask.GetMask("Ground");
+        if (Physics2D.OverlapCircle(new Vector2(worldPos.x, worldPos.y), 0.3f, groundLayer) == null)
+            return false;
+
+        // 4. No encima de edificios, jugadores ni fábricas enemigas
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(worldPos.x, worldPos.y), 1.5f);
+        foreach (var col in colliders)
+        {
+            if (col.CompareTag("Hangar") ||
+                col.CompareTag("Dormitories") ||
+                col.CompareTag("TankFactory") ||
+                col.CompareTag("Garage") ||
+                col.CompareTag("PlayerBase") ||
+                col.CompareTag("Player") ||
+                col.CompareTag("EnemyFactory"))
+                return false;
+        }
+
+        // 5. Overlap con blockingLayers
         if (previewInstance != null)
         {
             Renderer rend = previewInstance.GetComponentInChildren<Renderer>();

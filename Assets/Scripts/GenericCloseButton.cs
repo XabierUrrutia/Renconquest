@@ -26,6 +26,10 @@ public class GenericCloseButton : MonoBehaviour
     {
         SoundColector.Instance?.PlayUiClick();
 
+        // Cancelar selección de edificio si está en modo construcción
+        if (BuildingManager.Instance != null)
+            BuildingManager.Instance.CancelPlacing();
+
         if (panelsToClose != null)
         {
             for (int i = 0; i < panelsToClose.Length; i++)
@@ -38,7 +42,6 @@ public class GenericCloseButton : MonoBehaviour
         if (resumeTimeOnClose)
         {
             Time.timeScale = 1f;
-            Debug.Log("[GenericCloseButton] Painéis fechados. Time.timeScale = 1.");
         }
     }
 }

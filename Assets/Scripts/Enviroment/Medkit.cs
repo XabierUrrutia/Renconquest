@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Medkit : MonoBehaviour
 {
-    [Header("Configuración de Curación")]
+    [Header("Configuraciï¿½n de Curaciï¿½n")]
     [SerializeField] private int fixedHealAmount = 2; // Cura exactamente 2 puntos
     [SerializeField] private bool destroyOnUse = true;
 
@@ -14,36 +14,40 @@ public class Medkit : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-
-            if (playerHealth != null && !playerHealth.IsFullHealth())
-            {
-                ApplyHeal(playerHealth);
-            }
+            ApplyHealToAll();
         }
     }
 
-    private void ApplyHeal(PlayerHealth playerHealth)
+    private void ApplyHealToAll()
     {
-        int maxHealth = playerHealth.GetMaxHealth();
-        int currentHealth = playerHealth.GetCurrentHealth();
+        PlayerHealth[] soldiers = FindObjectsByType<PlayerHealth>(FindObjectsSortMode.None);
+        GeneralHealth[] generals = FindObjectsByType<GeneralHealth>(FindObjectsSortMode.None);
 
-        Debug.Log($"Antes de curar: {currentHealth}/{maxHealth}");
+        bool anyHealed = false;
 
-        // Calcular la curación real (no pasarse del máximo)
-        int healAmount = Mathf.Min(fixedHealAmount, maxHealth - currentHealth);
+        foreach (PlayerHealth ph in soldiers)
+        {
+            if (!ph.IsDead && !ph.IsFullHealth())
+            {
+                ph.Heal(fixedHealAmount);
+                anyHealed = true;
+            }
+        }
 
-        Debug.Log($"Curando: {healAmount} puntos");
+        foreach (GeneralHealth gh in generals)
+        {
+            if (!gh.IsDead && !gh.IsFullHealth())
+            {
+                gh.Heal(fixedHealAmount);
+                anyHealed = true;
+            }
+        }
 
-        // Aplicar la curación
-        playerHealth.Heal(healAmount);
+        if (!anyHealed) return;
 
-        // Efectos
         PlayHealEffects();
         GameEvents.RaiseMedikitPickedUp();
 
-
-        // Destruir o desactivar el medkit
         if (destroyOnUse)
         {
             Destroy(gameObject);
