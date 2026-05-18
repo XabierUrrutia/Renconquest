@@ -258,6 +258,17 @@ public class EnemyController : MonoBehaviour
         Vector3 objetivoActual = puntosCamino[0];
         Vector3 direccion = (objetivoActual - transform.position).normalized;
 
+        // Protección: si el siguiente paso entra en agua, recalcular ruta
+        Vector3 siguientePaso = transform.position + direccion * velocidad * Time.deltaTime;
+        if (Physics2D.OverlapCircle(siguientePaso, 0.25f, capaAgua) &&
+            !Physics2D.OverlapCircle(siguientePaso, 0.25f, capaWaypointPuente))
+        {
+            moviendose = false;
+            puntosCamino.Clear();
+            CalcularRutaCompleta(transform.position, objetivoFinal);
+            return;
+        }
+
         // Mover hacia el objetivo
         transform.position += direccion * velocidad * Time.deltaTime;
         direccionMovimiento = direccion;
@@ -367,15 +378,16 @@ public class EnemyController : MonoBehaviour
         float distancia = Vector3.Distance(inicio, fin);
         if (distancia < 0.1f) return false;
 
-        int muestras = Mathf.CeilToInt(distancia / 0.3f);
+        // Paso más pequeño y radio mayor para no saltar agua estrecha
+        int muestras = Mathf.CeilToInt(distancia / 0.15f);
 
         for (int i = 0; i <= muestras; i++)
         {
             float t = (float)i / (float)muestras;
             Vector3 punto = Vector3.Lerp(inicio, fin, t);
 
-            if (Physics2D.OverlapCircle(punto, 0.2f, capaAgua) &&
-                !Physics2D.OverlapCircle(punto, 0.2f, capaWaypointPuente))
+            if (Physics2D.OverlapCircle(punto, 0.3f, capaAgua) &&
+                !Physics2D.OverlapCircle(punto, 0.3f, capaWaypointPuente))
             {
                 return true;
             }

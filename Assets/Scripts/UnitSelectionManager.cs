@@ -232,7 +232,12 @@ public class UnitSelectionManager : MonoBehaviour
                 }
                 else
                 {
-                    unidadesSeleccionadas[i].Detener();
+                    // Si ninguna posición del círculo es válida, buscar punto cercano seguro
+                    Vector3 fallback = BuscarPuntoCercanoValido(destino);
+                    if (fallback != Vector3.zero)
+                        unidadesSeleccionadas[i].MoverADestino(fallback);
+                    else
+                        unidadesSeleccionadas[i].Detener();
                 }
             }
 
@@ -443,12 +448,32 @@ public class UnitSelectionManager : MonoBehaviour
     {
         if (capaEdificios != 0 && Physics2D.OverlapCircle(punto, 0.3f, capaEdificios) != null)
             return false;
-        if (capaAgua != 0 && Physics2D.OverlapCircle(punto, 0.3f, capaAgua) != null)
+        // Radio mayor (0.5f) para rechazar posiciones en el borde agua-hierba
+        if (capaAgua != 0 && Physics2D.OverlapCircle(punto, 0.5f, capaAgua) != null)
         {
-            if (capaWaypointPuente == 0 || Physics2D.OverlapCircle(punto, 0.3f, capaWaypointPuente) == null)
+            if (capaWaypointPuente == 0 || Physics2D.OverlapCircle(punto, 0.5f, capaWaypointPuente) == null)
                 return false;
         }
         return true;
+    }
+
+    Vector3 BuscarPuntoCercanoValido(Vector3 centro)
+    {
+        float paso = 0.5f;
+        int maxAnillos = 6;
+        for (int anillo = 1; anillo <= maxAnillos; anillo++)
+        {
+            float radio = paso * anillo;
+            int pasos = Mathf.Max(8, anillo * 8);
+            for (int j = 0; j < pasos; j++)
+            {
+                float angulo = j * (2f * Mathf.PI / pasos);
+                Vector3 candidato = centro + new Vector3(Mathf.Cos(angulo), Mathf.Sin(angulo), 0) * radio;
+                if (EsPuntoValido(candidato))
+                    return candidato;
+            }
+        }
+        return Vector3.zero;
     }
 
     // ---------------------------------------------------------

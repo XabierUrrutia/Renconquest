@@ -117,14 +117,13 @@ public class SimpleCharacterMovement : MonoBehaviour, ISelectableUnit
 
     public void MoverADestino(Vector3 destino)
     {
-        if (!puedeClickar || !estaSeleccionado) return;
+        if (!estaSeleccionado) return;
 
         Vector3 pos = new Vector3(destino.x, destino.y, 0);
         if (!EsSueloValido(pos)) return;
 
-        ConfigurarCooldown();
         CalcularRutaInteligente(transform.position, pos);
-        tiempoUltimoChequeo = INTERVALO_CHEQUEO_RUTA; // fuerza chequeo en el próximo FixedUpdate
+        tiempoUltimoChequeo = INTERVALO_CHEQUEO_RUTA;
     }
 
     void CalcularRutaInteligente(Vector3 inicio, Vector3 destino)
@@ -165,10 +164,7 @@ public class SimpleCharacterMovement : MonoBehaviour, ISelectableUnit
                 puntosCamino.Add(puente.waypointConectado.transform.position);
                 AñadirRutaConWaypoints(puente.waypointConectado.transform.position, destino);
             }
-            else
-            {
-                AñadirRutaConWaypoints(inicio, destino);
-            }
+            // Si no hay puente accesible, no moverse (mejor parado que en el agua)
         }
         else
         {
@@ -401,14 +397,15 @@ public class SimpleCharacterMovement : MonoBehaviour, ISelectableUnit
         float distancia = Vector3.Distance(inicio, fin);
         if (distancia < 0.1f) return false;
 
-        int muestras = Mathf.CeilToInt(distancia / 2f);
+        // Paso 0.15f y radio 0.3f para no saltarse ríos estrechos
+        int muestras = Mathf.CeilToInt(distancia / 0.15f);
         for (int i = 0; i <= muestras; i++)
         {
             Vector3 punto = Vector3.Lerp(inicio, fin, (float)i / muestras);
-            int count = Physics2D.OverlapCircleNonAlloc(punto, 0.2f, _bufferOverlap, capaAgua);
+            int count = Physics2D.OverlapCircleNonAlloc(punto, 0.3f, _bufferOverlap, capaAgua);
             if (count > 0)
             {
-                if (Physics2D.OverlapCircleNonAlloc(punto, 0.2f, _bufferOverlap, capaWaypointPuente) == 0)
+                if (Physics2D.OverlapCircleNonAlloc(punto, 0.3f, _bufferOverlap, capaWaypointPuente) == 0)
                     return true;
             }
         }
@@ -418,7 +415,10 @@ public class SimpleCharacterMovement : MonoBehaviour, ISelectableUnit
     bool EsSueloValido(Vector3 posicion)
     {
         if (Physics2D.OverlapCircle(posicion, 0.3f, capEdificios) != null) return false;
-        return Physics2D.OverlapCircle(posicion, 0.3f, capaSuelo) != null;
+        if (Physics2D.OverlapCircle(posicion, 0.3f, capaSuelo) != null) return true;
+        // El puente no está en capaSuelo pero es pisable
+        if (capaWaypointPuente != 0 && Physics2D.OverlapCircle(posicion, 0.3f, capaWaypointPuente) != null) return true;
+        return false;
     }
 
     void ConfigurarCooldown()
