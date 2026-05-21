@@ -248,28 +248,21 @@ public class BuildingManager : MonoBehaviour
 
     IEnumerator ConstructBuildingRoutine(GameObject building, float timeToBuild)
     {
-        // 1. Desactivamos componentes mientras se construye
-        DisableRuntimeComponents(building);
+        // Guardar escala original ANTES de cualquier modificación
+        Vector3 escalaOriginal = building.transform.localScale;
 
-        // Efecto visual de construcción
+        DisableRuntimeComponents(building);
         Coroutine pulse = StartCoroutine(ConstructionPulseRoutine(building.transform));
 
-        Debug.Log($"Construyendo {building.name}... Tiempo: {timeToBuild}s");
-
-        // 2. Esperamos el tiempo necesario
         yield return new WaitForSeconds(timeToBuild);
 
-        // 3. Limpieza y activación
         if (pulse != null) StopCoroutine(pulse);
 
         if (building != null)
         {
-            building.transform.localScale = Vector3.one; // Resetear escala
-
-            // Volvemos a activar los scripts del edificio real
+            // Restaurar escala original en vez de forzar Vector3.one
+            building.transform.localScale = escalaOriginal;
             EnableRuntimeComponents(building);
-
-            Debug.Log($"{building.name} completado!");
         }
     }
 

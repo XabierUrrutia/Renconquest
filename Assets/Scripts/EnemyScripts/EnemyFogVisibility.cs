@@ -13,16 +13,13 @@ public class EnemyFogVisibility : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         fogOfWar = FindObjectOfType<FogOfWar>();
-
-        // Buscar el slider de vida en los hijos o en el objeto
         healthBar = GetComponentInChildren<Slider>(true);
-
-        // Si el health bar está en un Canvas World Space
         healthBarCanvas = GetComponentInChildren<Canvas>(true);
 
+        // Si no hay FogOfWar simplemente desactivar el script
+        // sin dar error — todo visible por defecto
         if (fogOfWar == null)
         {
-            Debug.LogError("No se encontró el sistema FogOfWar en la escena");
             enabled = false;
             return;
         }
@@ -61,7 +58,9 @@ public class EnemyFogVisibility : MonoBehaviour
 
     void OnBecameVisible()
     {
-        // Backup en caso de que el renderer se active por otros medios
+        // Proteger contra null si no hay FogOfWar
+        if (fogOfWar == null) return;
+
         if (!fogOfWar.IsPositionVisible(transform.position))
         {
             UpdateVisibility(false);

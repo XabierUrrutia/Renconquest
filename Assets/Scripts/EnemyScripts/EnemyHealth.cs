@@ -105,13 +105,13 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         if (!alwaysShowHealthBar)
-        {
             ShowHealthBar();
-        }
 
         UpdateHealthBar();
 
-        Debug.Log($"Enemy '{name}' recibi€ {amount} de da“o. Vida: {currentHealth}/{maxHealth}");
+        // Actualizar barra de vida del boss si existe
+        if (WaveSystem.Instance != null)
+            WaveSystem.Instance.UpdateBossHealthBar(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
             Die();
@@ -148,6 +148,11 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+
+        // Notificar al WaveSystem
+        if (WaveSystem.Instance != null)
+            WaveSystem.Instance.OnEnemyDied(gameObject);
+
         // Notificar al EnemyWaveManager
         if (EnemyWaveManager.Instance != null)
         {

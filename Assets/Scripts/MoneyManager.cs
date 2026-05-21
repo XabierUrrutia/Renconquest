@@ -23,6 +23,9 @@ public class MoneyManager : MonoBehaviour
     [Header("Rendimiento")]
     public float incomeTickInterval = 1f;
 
+    [Header("Modo Dinero Estático (Mapa 3)")]
+    public bool staticMoney = false;
+
     // --- LISTAS DE CONTROL ---
     private readonly List<BuildingOwnership> incomeSources = new List<BuildingOwnership>();
     private readonly List<EnemyBaseFactory> activeFactories = new List<EnemyBaseFactory>();
@@ -74,6 +77,8 @@ public class MoneyManager : MonoBehaviour
 
         // 4. Actualizar HUD
         NotifyHUD();
+
+        staticMoney = false; // Resetear al cambiar de mapa
     }
     // -------------------------------------------------------------
 
@@ -200,6 +205,14 @@ public class MoneyManager : MonoBehaviour
         {
             yield return new WaitForSeconds(incomeTickInterval);
 
+
+            // Si dinero estático, no hacer nada
+            if (staticMoney)
+            {
+                NotifyHUD();
+                continue;
+            }
+
             int passiveIncome = 0;
             // Limpieza y suma de ingresos
             for (int i = incomeSources.Count - 1; i >= 0; i--)
@@ -248,6 +261,7 @@ public class MoneyManager : MonoBehaviour
 
     public void ActivarCobroDeSalarios()
     {
+        if (staticMoney) return;
         if (!sePaganSalarios)
         {
             sePaganSalarios = true;

@@ -113,20 +113,23 @@ public class EnemyAI : MonoBehaviour
     {
         jogadoresDisponiveis.Clear();
 
+        // Buscar jugadores
         GameObject[] todosJogadores = GameObject.FindGameObjectsWithTag("Player");
-
         foreach (GameObject jogadorObj in todosJogadores)
         {
-            // CAMBIO: Buscar IHealth en lugar de PlayerHealth específico
             IHealth health = jogadorObj.GetComponent<IHealth>();
             if (health != null && !health.IsDead && jogadorObj.activeInHierarchy)
-            {
                 jogadoresDisponiveis.Add(jogadorObj.transform);
-                if (debugAtivo) Debug.Log($"{gameObject.name}: Unidad encontrada (IHealth): {jogadorObj.name}");
-            }
         }
 
-        if (debugAtivo) Debug.Log($"{gameObject.name}: Total de unidades encontradas: {jogadoresDisponiveis.Count}");
+        // Buscar torres
+        GameObject[] todasTorres = GameObject.FindGameObjectsWithTag("Tower");
+        foreach (GameObject torre in todasTorres)
+        {
+            IHealth health = torre.GetComponent<IHealth>();
+            if (health != null && !health.IsDead && torre.activeInHierarchy)
+                jogadoresDisponiveis.Add(torre.transform);
+        }
     }
 
     Transform EncontrarJogadorMaisProximo()
