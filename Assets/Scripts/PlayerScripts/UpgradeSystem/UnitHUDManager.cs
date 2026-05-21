@@ -16,7 +16,7 @@ public class UnitHUDManager : MonoBehaviour
     public TextMeshProUGUI nivelTexto;
     public TextMeshProUGUI hpTexto;
 
-    [Header("Munición")]
+    [Header("Municiï¿½n")]
     public TextMeshProUGUI municionTexto;
 
     // Referencia al script de disparo (Puede ser NULL si es un tanque)
@@ -33,7 +33,7 @@ public class UnitHUDManager : MonoBehaviour
 
     void Start()
     {
-        // Corrección de rangos 0-1
+        // Correcciï¿½n de rangos 0-1
         if (xpSlider != null) { xpSlider.minValue = 0; xpSlider.maxValue = 1; }
         if (hpSlider != null) { hpSlider.minValue = 0; hpSlider.maxValue = 1; }
         if (shieldSlider != null) { shieldSlider.minValue = 0; shieldSlider.maxValue = 1; }
@@ -43,9 +43,17 @@ public class UnitHUDManager : MonoBehaviour
 
     void Update()
     {
-        if (saludSeleccionada != null)
+        // veteraniaSeleccionada es MonoBehaviour: Unity detecta correctamente si el objeto fue destruido
+        if (veteraniaSeleccionada != null)
         {
             ActualizarStatsCombate();
+        }
+        else if (panelCompleto != null && panelCompleto.activeSelf)
+        {
+            // La unidad fue destruida sin deseleccionarse explÃ­citamente - ocultar panel
+            saludSeleccionada = null;
+            armaSeleccionada = null;
+            panelCompleto.SetActive(false);
         }
     }
 
@@ -59,15 +67,15 @@ public class UnitHUDManager : MonoBehaviour
 
         if (veteraniaSeleccionada != null)
         {
-            // 1. Conexiones básicas
+            // 1. Conexiones bï¿½sicas
             veteraniaSeleccionada.OnStatsChanged += ActualizarBarraXP;
             saludSeleccionada = veteraniaSeleccionada.GetComponent<IHealth>();
 
             // 2. BUSQUEDA DEL ARMA (MODIFICADO)
-            // Intentamos coger el arma. Si es un tanque, esto será null.
+            // Intentamos coger el arma. Si es un tanque, esto serï¿½ null.
             armaSeleccionada = veteraniaSeleccionada.GetComponent<PlayerShooting>();
 
-            // YA NO DAMOS ERROR AQUÍ. Simplemente tomamos nota de si tiene arma o no.
+            // YA NO DAMOS ERROR AQUï¿½. Simplemente tomamos nota de si tiene arma o no.
 
             // 3. Activar Panel
             if (panelCompleto != null) panelCompleto.SetActive(true);
@@ -78,7 +86,7 @@ public class UnitHUDManager : MonoBehaviour
                 municionTexto.gameObject.SetActive(true); // Siempre activo para mostrar algo
             }
 
-            // Configuración de la Foto (Usando TU variable retratoCara)
+            // Configuraciï¿½n de la Foto (Usando TU variable retratoCara)
             if (imagenRetratoUI != null)
             {
                 if (unidad.retratoCara != null) imagenRetratoUI.sprite = unidad.retratoCara;
@@ -125,7 +133,7 @@ public class UnitHUDManager : MonoBehaviour
             shieldSlider.value = (maxEscudo > 0) ? escudo / maxEscudo : 0;
         }
 
-        // --- 3. MUNICIÓN (MODIFICADO) ---
+        // --- 3. MUNICIï¿½N (MODIFICADO) ---
         if (municionTexto != null)
         {
             if (armaSeleccionada != null)

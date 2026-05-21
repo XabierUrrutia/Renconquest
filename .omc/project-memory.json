@@ -1,0 +1,156 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1779405025270,
+  "projectRoot": "C:\\Users\\xabie\\Documents\\GitHub\\Renconquest",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "Assets": {
+      "path": "Assets",
+      "purpose": "Static assets",
+      "fileCount": 10,
+      "lastAccessed": 1779405025241,
+      "keyFiles": [
+        "Audio.meta",
+        "Movement.meta",
+        "PixelBattleText.meta",
+        "prefabs.meta",
+        "Samples.meta"
+      ]
+    },
+    "Library": {
+      "path": "Library",
+      "purpose": null,
+      "fileCount": 29,
+      "lastAccessed": 1779405025242,
+      "keyFiles": [
+        "AnnotationManager",
+        "ArtifactDB",
+        "ArtifactDB-lock",
+        "BuildPlayer.prefs",
+        "BuildProfileContext.asset"
+      ]
+    },
+    "Logs": {
+      "path": "Logs",
+      "purpose": null,
+      "fileCount": 5,
+      "lastAccessed": 1779405025243,
+      "keyFiles": [
+        "AssetImportWorker0.log",
+        "AssetImportWorker1.log",
+        "shadercompiler-AssetImportWorker0-0.log",
+        "shadercompiler-AssetImportWorker1-0.log",
+        "shadercompiler-UnityShaderCompiler.exe-0.log"
+      ]
+    },
+    "obj": {
+      "path": "obj",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1779405025244,
+      "keyFiles": []
+    },
+    "Packages": {
+      "path": "Packages",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1779405025244,
+      "keyFiles": [
+        "manifest.json",
+        "packages-lock.json"
+      ]
+    },
+    "ProjectSettings": {
+      "path": "ProjectSettings",
+      "purpose": null,
+      "fileCount": 24,
+      "lastAccessed": 1779405025245,
+      "keyFiles": [
+        "AudioManager.asset",
+        "ClusterInputManager.asset",
+        "DynamicsManager.asset",
+        "EditorBuildSettings.asset",
+        "EditorSettings.asset"
+      ]
+    },
+    "Temp": {
+      "path": "Temp",
+      "purpose": null,
+      "fileCount": 78,
+      "lastAccessed": 1779405025246,
+      "keyFiles": [
+        "01bf33010cd34ba188b7db6cfc091a5f.res",
+        "01bf33010cd34ba188b7db6cfc091a5f.resG",
+        "028bf501cb07dce4c55104460acea00b.res",
+        "028bf501cb07dce4c55104460acea00b.resG",
+        "028bf501cb07dce4c55104460acea00b.resS"
+      ]
+    },
+    "UserSettings": {
+      "path": "UserSettings",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1779405025246,
+      "keyFiles": [
+        "EditorUserSettings.asset",
+        "Search.index",
+        "Search.settings"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "README.md",
+      "accessCount": 2,
+      "lastAccessed": 1779405580544,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\GameManager.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779405481073,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\PlayerScripts\\UpgradeSystem\\UnitVeterancy.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779405481449,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\EnemyWaveManager.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779405482880,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

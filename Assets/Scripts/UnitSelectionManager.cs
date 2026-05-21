@@ -186,11 +186,14 @@ public class UnitSelectionManager : MonoBehaviour
         }
 
         // Limpiamos la lista por si alguna unidad murió
+        int prevCount = unidadesSeleccionadas.Count;
         unidadesSeleccionadas.RemoveAll(u => u == null || u.gameObject == null);
 
         if (unidadesSeleccionadas.Count == 0)
         {
             ResetEasterEggState();
+            if (prevCount > 0 && UnitHUDManager.Instance != null)
+                UnitHUDManager.Instance.SeleccionarUnidad(null);
         }
 
         if (Input.GetMouseButtonDown(1) && unidadesSeleccionadas.Count > 0)
