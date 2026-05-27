@@ -166,6 +166,9 @@ public class UnitSelectionManager : MonoBehaviour
                     }
                 }
 
+                if (unidadesSeleccionadas.Count > 0)
+                    GameEvents.RaiseUnitsSelected(unidadesSeleccionadas.Count);
+
                 unidadClicadaMouseDown = null;
                 shiftMouseDown = false;
                 arrastrando = false; // Resetear bandera
@@ -240,16 +243,19 @@ public class UnitSelectionManager : MonoBehaviour
                     if (fallback != Vector3.zero)
                         unidadesSeleccionadas[i].MoverADestino(fallback);
                     else
-                        unidadesSeleccionadas[i].Detener();
+                        // Last resort: move toward the clicked point and let movement code handle the obstacle
+                        unidadesSeleccionadas[i].MoverADestino(destino);
                 }
             }
+
+            int tankCount = unidadesSeleccionadas.Count(u => IsTank(u));
+            int infantryCount = Mathf.Max(0, unidadesSeleccionadas.Count - tankCount);
+            GameEvents.RaiseUnitsMoveCommand(infantryCount, tankCount);
 
             //Audio de movimiento
             if (SoundColector.Instance != null &&
                 Time.time - ultimoSomMovimientoTime >= intervaloMinSomMovimiento)
             {
-                int tankCount = unidadesSeleccionadas.Count(u => IsTank(u));
-                int infantryCount = Mathf.Max(0, unidadesSeleccionadas.Count - tankCount);
 
                 var vozUnit = (unidadVozPrincipal != null) ? unidadVozPrincipal : unidadesSeleccionadas[0];
                 int id = (vozUnit != null && vozUnit.gameObject != null) ? vozUnit.gameObject.GetInstanceID() : 0;
@@ -447,10 +453,18 @@ public class UnitSelectionManager : MonoBehaviour
         return destinos;
     }
 
+    private readonly Collider2D[] _edificioBuffer = new Collider2D[1];
+
     bool EsPuntoValido(Vector3 punto)
     {
-        if (capaEdificios != 0 && Physics2D.OverlapCircle(punto, 0.3f, capaEdificios) != null)
-            return false;
+        if (capaEdificios != 0)
+        {
+            ContactFilter2D filtroEdificios = new ContactFilter2D();
+            filtroEdificios.SetLayerMask(capaEdificios);
+            filtroEdificios.useTriggers = false;
+            if (Physics2D.OverlapCircle(punto, 0.3f, filtroEdificios, _edificioBuffer) > 0)
+                return false;
+        }
         // Radio mayor (0.5f) para rechazar posiciones en el borde agua-hierba
         if (capaAgua != 0 && Physics2D.OverlapCircle(punto, 0.5f, capaAgua) != null)
         {
@@ -462,12 +476,12 @@ public class UnitSelectionManager : MonoBehaviour
 
     Vector3 BuscarPuntoCercanoValido(Vector3 centro)
     {
-        float paso = 0.5f;
-        int maxAnillos = 6;
+        float paso = 0.3f;
+        int maxAnillos = 16;
         for (int anillo = 1; anillo <= maxAnillos; anillo++)
         {
             float radio = paso * anillo;
-            int pasos = Mathf.Max(8, anillo * 8);
+            int pasos = Mathf.Max(12, anillo * 10);
             for (int j = 0; j < pasos; j++)
             {
                 float angulo = j * (2f * Mathf.PI / pasos);

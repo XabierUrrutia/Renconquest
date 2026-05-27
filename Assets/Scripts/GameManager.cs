@@ -6,15 +6,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    // --- CONFIGURACIÓN DE DERROTA ---
+    // --- CONFIGURACIï¿½N DE DERROTA ---
     [Header("Condiciones de Derrota")]
-    // IMPORTANTE: Pon aquí el precio de lo MÁS BARATO que se pueda comprar en tu juego
+    // IMPORTANTE: Pon aquï¿½ el precio de lo Mï¿½S BARATO que se pueda comprar en tu juego
     public int costeMinimoParaJugar = 100;
     public bool baseDestruida = false;
     // ---------------------------------------
 
     private List<IHealth> allUnits = new List<IHealth>();
     private bool gameOver = false;
+    public static bool tutorialMode = false;
 
     void Awake()
     {
@@ -33,22 +34,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // --- NUEVO: COMPROBACIÓN CONSTANTE (El secreto para que sea instantáneo) ---
+    // --- NUEVO: COMPROBACIï¿½N CONSTANTE (El secreto para que sea instantï¿½neo) ---
     void Update()
     {
-        // Si ya es Game Over, no hacemos nada
         if (gameOver) return;
+        if (tutorialMode) return;
 
-        // 1. SI LA BASE CAYÓ -> FIN DIRECTO
+        // 1. SI LA BASE CAYï¿½ -> FIN DIRECTO
         if (baseDestruida)
         {
             // Solo lo llamamos una vez
-            Debug.Log("¡Base Principal destruida! Fin del juego.");
+            Debug.Log("ï¿½Base Principal destruida! Fin del juego.");
             TriggerGameOver();
             return;
         }
 
-        // 2. COMPROBACIÓN CONTINUA DE RECURSOS Y TROPAS
+        // 2. COMPROBACIï¿½N CONTINUA DE RECURSOS Y TROPAS
         // Solo verificamos si existen los managers para evitar errores
         if (MoneyManager.Instance != null)
         {
@@ -57,41 +58,42 @@ public class GameManager : MonoBehaviour
             // Calculamos tropas vivas
             int tropasMoviles = ContarTropasVivas();
 
-            // CONDICIÓN CRÍTICA:
-            // Si el dinero es menor que el coste mínimo Y tengo 0 tropas...
+            // CONDICIï¿½N CRï¿½TICA:
+            // Si el dinero es menor que el coste mï¿½nimo Y tengo 0 tropas...
             if (dineroActual < costeMinimoParaJugar && tropasMoviles <= 0)
             {
-                Debug.Log("GAME OVER INSTANTÁNEO: Sin tropas y sin dinero.");
+                Debug.Log("GAME OVER INSTANTï¿½NEO: Sin tropas y sin dinero.");
                 TriggerGameOver();
             }
         }
     }
 
-    // Método auxiliar para contar tropas (Extraído para usarlo en el Update limpiamente)
+    // Mï¿½todo auxiliar para contar tropas (Extraï¿½do para usarlo en el Update limpiamente)
     private int ContarTropasVivas()
     {
         int count = 0;
 
-        // Opción A: PopulationManager (Más rápido y fiable)
+        // Opciï¿½n A: PopulationManager (Mï¿½s rï¿½pido y fiable)
         if (PopulationManager.Instance != null)
         {
             count = PopulationManager.Instance.soldadosActuales + PopulationManager.Instance.tanquesActuales;
         }
-        // Opción B: Respaldo manual (Tu código original)
+        // Opciï¿½n B: Respaldo manual (Tu cï¿½digo original)
         else
         {
             // Limpieza preventiva de nulos
             // Nota: En un Update esto puede ser pesado, pero si no hay PopulationManager es necesario.
             for (int i = allUnits.Count - 1; i >= 0; i--)
             {
-                if (allUnits[i] == null || allUnits[i].IsDead)
+                var unit = allUnits[i];
+                if (unit == null || (unit is Object obj && !obj) || unit.IsDead)
                 {
                     allUnits.RemoveAt(i);
                     continue;
                 }
 
                 // Si NO tiene el script EsEdificio, asumimos que es tropa
-                if (allUnits[i].transform.GetComponent<EsEdificio>() == null)
+                if (unit.transform.GetComponent<EsEdificio>() == null)
                 {
                     count++;
                 }
@@ -114,7 +116,7 @@ public class GameManager : MonoBehaviour
         if (allUnits.Contains(unit))
         {
             allUnits.Remove(unit);
-            // Ya no hace falta llamar a CheckGameOver aquí, el Update lo cazará al instante
+            // Ya no hace falta llamar a CheckGameOver aquï¿½, el Update lo cazarï¿½ al instante
         }
     }
 
@@ -123,17 +125,17 @@ public class GameManager : MonoBehaviour
         RegisterUnit(newUnit);
     }
 
-    // --- MÉTODO PARA CUANDO DESTRUYEN LA BASE ---
+    // --- Mï¿½TODO PARA CUANDO DESTRUYEN LA BASE ---
     public void NotificarBaseDestruida()
     {
         baseDestruida = true;
-        // El Update lo detectará en el siguiente frame
+        // El Update lo detectarï¿½ en el siguiente frame
     }
 
-    // --- Mantenemos este método para que BuildingManager no de error, pero ya no hace falta lógica ---
+    // --- Mantenemos este mï¿½todo para que BuildingManager no de error, pero ya no hace falta lï¿½gica ---
     public void VerificarDineroTrasGasto()
     {
-        // El Update se encarga de esto automáticamente ahora.
+        // El Update se encarga de esto automï¿½ticamente ahora.
     }
 
     private void TriggerGameOver()

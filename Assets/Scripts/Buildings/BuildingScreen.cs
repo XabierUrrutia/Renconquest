@@ -6,7 +6,7 @@ public class BuildingScreen : MonoBehaviour
     [Tooltip("Arraste aqui o GameObject UI que representa o painel de BUILD (inicialmente inativo)")]
     public GameObject buildPanelUI;
 
-    [Tooltip("Botão que irá abrir/fechar o painel (opcional). Se atribuído, o listener será ligado automaticamente.")]
+    [Tooltip("Botï¿½o que irï¿½ abrir/fechar o painel (opcional). Se atribuï¿½do, o listener serï¿½ ligado automaticamente.")]
     public Button toggleButton;
 
     // HE ELIMINADO 'pauseOnOpen' y '_previousTimeScale' PORQUE YA NO LOS NECESITAS
@@ -20,7 +20,7 @@ public class BuildingScreen : MonoBehaviour
 
         if (toggleButton != null)
         {
-            // garante que não adicionamos múltiplos listeners
+            // garante que nï¿½o adicionamos mï¿½ltiplos listeners
             toggleButton.onClick.RemoveListener(ToggleBuild);
             toggleButton.onClick.AddListener(ToggleBuild);
         }
@@ -32,7 +32,7 @@ public class BuildingScreen : MonoBehaviour
             toggleButton.onClick.RemoveListener(ToggleBuild);
     }
 
-    // Abre o painel de construção
+    // Abre o painel de construï¿½ï¿½o
     public void ShowBuild()
     {
         if (_shown) return;
@@ -43,12 +43,12 @@ public class BuildingScreen : MonoBehaviour
 
         SoundColector.Instance?.PlayUiPanelOpen();
 
-        // AQUÍ ELIMINÉ LA LÍNEA QUE HACÍA Time.timeScale = 0f;
+        // AQUï¿½ ELIMINï¿½ LA Lï¿½NEA QUE HACï¿½A Time.timeScale = 0f;
 
-        Debug.Log("[BuildingScreen] Painel de construção mostrado.");
+        Debug.Log("[BuildingScreen] Painel de construï¿½ï¿½o mostrado.");
     }
 
-    // Fecha o painel de construção
+    // Fecha o painel de construï¿½ï¿½o
     public void HideBuild()
     {
         if (!_shown) return;
@@ -57,22 +57,24 @@ public class BuildingScreen : MonoBehaviour
         if (buildPanelUI != null)
             buildPanelUI.SetActive(false);
 
-        // AQUÍ ELIMINÉ LA LÍNEA QUE RESTAURABA EL TIEMPO
+        // AQUï¿½ ELIMINï¿½ LA Lï¿½NEA QUE RESTAURABA EL TIEMPO
 
-        Debug.Log("[BuildingScreen] Painel de construção ocultado.");
+        Debug.Log("[BuildingScreen] Painel de construï¿½ï¿½o ocultado.");
     }
 
-    // Alterna estado (o mesmo botão abre e fecha)
+    // Alterna estado (o mesmo botï¿½o abre e fecha)
     public void ToggleBuild()
     {
         SoundColector.Instance?.PlayUiClick();
+        // Read actual panel state instead of relying on _shown, in case it was closed externally (e.g. X button)
+        bool actuallyShown = buildPanelUI != null && buildPanelUI.activeSelf;
+        _shown = actuallyShown;
         if (_shown) HideBuild();
         else ShowBuild();
     }
 
-    // Retorna se o painel está aberto
     public bool IsShown()
     {
-        return _shown;
+        return buildPanelUI != null && buildPanelUI.activeSelf;
     }
 }

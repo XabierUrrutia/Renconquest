@@ -18,11 +18,11 @@ public class PanelSoldadosUI : MonoBehaviour
     public BuildingData datosDelSoldado;
     public BuildingData datosDelGeneral;
 
-    [Header("Configuración Económica")]
+    [Header("Configuraciï¿½n Econï¿½mica")]
     public int costSoldado = 50;
     public int costGeneral = 200;
 
-    [Header("Configuración de Población")]
+    [Header("Configuraciï¿½n de Poblaciï¿½n")]
     private int pobCosteSoldado = 1;
     private int pobCosteGeneral = 2;
 
@@ -68,20 +68,20 @@ public class PanelSoldadosUI : MonoBehaviour
         bool hasPop = PopulationManager.Instance != null;
         int currentMoney = hasMoney ? MoneyManager.Instance.CurrentMoney : 0;
 
-        // Comprobamos si el edificio actual está ocupado
+        // Comprobamos si el edificio actual estï¿½ ocupado
         bool isBusy = (currentProducer != null && currentProducer.isBusy);
 
-        // --- LÓGICA BOTÓN SOLDADO ---
+        // --- Lï¿½GICA BOTï¿½N SOLDADO ---
         if (soldadoButton != null)
         {
             bool puedePagar = currentMoney >= costSoldado;
             bool tieneSitio = hasPop && PopulationManager.Instance.HayEspacio(PopulationManager.TipoUnidad.Soldado, pobCosteSoldado);
 
-            // Solo activamos si tiene dinero, sitio Y el edificio NO está trabajando
+            // Solo activamos si tiene dinero, sitio Y el edificio NO estï¿½ trabajando
             soldadoButton.interactable = puedePagar && tieneSitio && !isBusy;
         }
 
-        // --- LÓGICA BOTÓN GENERAL ---
+        // --- Lï¿½GICA BOTï¿½N GENERAL ---
         if (generalButton != null)
         {
             bool puedePagar = currentMoney >= costGeneral;
@@ -98,7 +98,7 @@ public class PanelSoldadosUI : MonoBehaviour
 
         if (currentProducer == null)
         {
-            Debug.LogError("El edificio seleccionado no tiene el script 'BuildingProducer'. ¡Añádeselo al prefab!");
+            Debug.LogError("El edificio seleccionado no tiene el script 'BuildingProducer'. ï¿½Aï¿½ï¿½deselo al prefab!");
             return;
         }
 
@@ -110,17 +110,18 @@ public class PanelSoldadosUI : MonoBehaviour
     {
         if (currentProducer == null || currentProducer.isBusy) return;
 
-        // 1. Check Población
+        // 1. Check Poblaciï¿½n
         if (!PopulationManager.Instance.HayEspacio(PopulationManager.TipoUnidad.Soldado, pobCosteSoldado)) return;
 
         // 2. Check y Pago Dinero
         if (MoneyManager.Instance.CurrentMoney < costSoldado) return;
         MoneyManager.Instance.SpendMoney(costSoldado);
 
-        // 3. Ordenar al edificio que construya (Lógica del Slider y Spawn)
+        // 3. Ordenar al edificio que construya (Lï¿½gica del Slider y Spawn)
         if (datosDelSoldado != null)
         {
             currentProducer.StartProduction(datosDelSoldado);
+            GameEvents.RaiseSoldierRecruited();
         }
     }
 
@@ -128,7 +129,7 @@ public class PanelSoldadosUI : MonoBehaviour
     {
         if (currentProducer == null || currentProducer.isBusy) return;
 
-        // 1. Check Población
+        // 1. Check Poblaciï¿½n
         if (!PopulationManager.Instance.HayEspacio(PopulationManager.TipoUnidad.Soldado, pobCosteGeneral)) return;
 
         // 2. Check y Pago Dinero

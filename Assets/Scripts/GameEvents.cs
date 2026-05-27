@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class GameEvents
 {
@@ -25,6 +26,12 @@ public static class GameEvents
 
     public static event Action OnBuildingSelected;
     public static void RaiseBuildingSelected() => OnBuildingSelected?.Invoke();
+
+    public static event Action<Transform> OnBuildingPlaced;
+    public static void RaiseBuildingPlaced(Transform t) => OnBuildingPlaced?.Invoke(t);
+
+    public static event Action OnSoldierRecruited;
+    public static void RaiseSoldierRecruited() => OnSoldierRecruited?.Invoke();
 
     public static event Action OnBuildingCaptured;
     public static void RaiseBuildingCaptured() => OnBuildingCaptured?.Invoke();
@@ -58,4 +65,7 @@ public static class GameEvents
 
     public static event Action OnTechLevelUp;
     public static void RaiseTechLevelUp() => OnTechLevelUp?.Invoke();
+
+    public static event Action OnTutorialEnemyDied;
+    public static void RaiseTutorialEnemyDied() => OnTutorialEnemyDied?.Invoke();
 }

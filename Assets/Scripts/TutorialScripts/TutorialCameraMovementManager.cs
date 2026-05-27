@@ -5,34 +5,34 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Tutorial em 4 passos para mover a câmera: cima, baixo, esquerda, direita (WASD).
-/// Avança automaticamente quando o jogador move a câmera na direção correta.
-/// Após os 4 passos dá um período livre (freeMoveDuration) para o jogador mexer livremente,
-/// depois do período o tutorial pausa o jogo e abre o painel de opções para voltar ao menu.
-/// Mostra um indicador visual (seta) apontando a direção pedida.
+/// Tutorial em 4 passos para mover a cï¿½mera: cima, baixo, esquerda, direita (WASD).
+/// Avanï¿½a automaticamente quando o jogador move a cï¿½mera na direï¿½ï¿½o correta.
+/// Apï¿½s os 4 passos dï¿½ um perï¿½odo livre (freeMoveDuration) para o jogador mexer livremente,
+/// depois do perï¿½odo o tutorial pausa o jogo e abre o painel de opï¿½ï¿½es para voltar ao menu.
+/// Mostra um indicador visual (seta) apontando a direï¿½ï¿½o pedida.
 /// </summary>
 public class TutorialCameraMovementManager : MonoBehaviour
 {
-    public enum Direction { Up, Down, Left, Right }
+    public enum Direction { Up, Down, Left, Right, Zoom }
 
-    [Header("Referências UI / Narrador")]
+    [Header("Referï¿½ncias UI / Narrador")]
     public TutorialNarrator narrator;                 // opcional: mostra as falas configuradas
-    [Tooltip("Índices das falas no TutorialNarrator para cada passo (0-based). Tamanho = 4")]
-    public int[] narratorLineIndex = new int[4] { 0, 1, 2, 3 };
+    [Tooltip("ï¿½ndices das falas no TutorialNarrator para cada passo (0-based). Tamanho = 5")]
+    public int[] narratorLineIndex = new int[5] { 0, 1, 2, 3, 4 };
 
     public GameObject stepCompletePanel;              // painel final com contador (opcional)
     public TextMeshProUGUI stepMessageText;           // texto do painel
     public string nextSceneName = "";                 // opcional: cena seguinte a carregar ao fim
 
-    [Header("Configuração dos passos")]
-    public Direction[] steps = new Direction[4] { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
-    public float requiredMoveDistance = 0.5f;         // distância mínima de deslocamento da câmera para validar
-    public float freeMoveDuration = 10f;              // tempo livre após completar os 4 passos
+    [Header("Configuraï¿½ï¿½o dos passos")]
+    public Direction[] steps = new Direction[5] { Direction.Up, Direction.Down, Direction.Left, Direction.Right, Direction.Zoom };
+    public float requiredMoveDistance = 0.5f;         // distï¿½ncia mï¿½nima de deslocamento da cï¿½mera para validar
+    public float freeMoveDuration = 20f;              // tempo livre apï¿½s completar os 4 passos
 
     [Header("Indicador visual (seta)")]
-    [Tooltip("Prefab da seta (World space). Será instanciado e posicionado próximo ao centro da câmera.")]
+    [Tooltip("Prefab da seta (World space). Serï¿½ instanciado e posicionado prï¿½ximo ao centro da cï¿½mera.")]
     public GameObject arrowPrefab;
-    [Tooltip("Distância da seta a partir da posição da câmera (unidades mundo)")]
+    [Tooltip("Distï¿½ncia da seta a partir da posiï¿½ï¿½o da cï¿½mera (unidades mundo)")]
     public float arrowDistance = 3f;
     [Tooltip("Offset vertical (Z) para garantir que a seta aparece acima do mapa")]
     public float arrowZ = -1f;
@@ -42,7 +42,9 @@ public class TutorialCameraMovementManager : MonoBehaviour
 
     int currentStep = 0;
     Camera cam;
+    cameraFollow camFollow;
     Vector3 stepStartPos;
+    float stepStartZoom;
     bool waitingForMove = false;
     bool tutorialFinished = false;
 
@@ -53,7 +55,9 @@ public class TutorialCameraMovementManager : MonoBehaviour
     {
         cam = Camera.main;
         if (cam == null)
-            Debug.LogWarning("TutorialCameraMovementManager: Camera.main não encontrada.");
+            Debug.LogWarning("TutorialCameraMovementManager: Camera.main nï¿½o encontrada.");
+
+        camFollow = FindObjectOfType<cameraFollow>();
 
         if (stepCompletePanel != null)
             stepCompletePanel.SetActive(false);
@@ -64,10 +68,11 @@ public class TutorialCameraMovementManager : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return;
         if (tutorialFinished) return;
         if (!waitingForMove) return;
 
-        // Detecta input direto (WASD) OU deslocamento da câmera desde o início do passo
+        // Detecta input direto (WASD) OU deslocamento da cï¿½mera desde o inï¿½cio do passo
         bool moved = false;
         Vector3 camPos = cam != null ? cam.transform.position : Vector3.zero;
 
@@ -89,6 +94,10 @@ public class TutorialCameraMovementManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.D)) moved = true;
                 if (camPos.x - stepStartPos.x >= requiredMoveDistance) moved = true;
                 break;
+            case Direction.Zoom:
+                if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.0001f) moved = true;
+                if (cam != null && Mathf.Abs(cam.orthographicSize - stepStartZoom) >= 0.5f) moved = true;
+                break;
         }
 
         if (moved)
@@ -105,11 +114,19 @@ public class TutorialCameraMovementManager : MonoBehaviour
             return;
         }
 
-        // Guarda posição inicial da câmera e habilita escuta
+        // Guarda posiï¿½ï¿½o inicial da cï¿½mera e habilita escuta
         stepStartPos = cam != null ? cam.transform.position : Vector3.zero;
+        stepStartZoom = cam != null ? cam.orthographicSize : 0f;
         waitingForMove = true;
 
-        // Mostrar fala do narrador se atribuído
+        // Bloqueia sÃ³ o que nÃ£o Ã© necessÃ¡rio para este passo
+        if (camFollow != null)
+        {
+            camFollow.blockMovement = steps[stepIndex] == Direction.Zoom;
+            camFollow.blockZoom = steps[stepIndex] != Direction.Zoom;
+        }
+
+        // Mostrar fala do narrador se atribuï¿½do
         if (narrator != null && narratorLineIndex != null && stepIndex < narratorLineIndex.Length)
         {
             int line = narratorLineIndex[stepIndex];
@@ -119,11 +136,14 @@ public class TutorialCameraMovementManager : MonoBehaviour
         // Mostrar mensagem simples no HUD (opcional)
         if (stepMessageText != null)
         {
-            stepMessageText.text = $"Passo {stepIndex + 1}/{steps.Length}: mover a câmera para {steps[stepIndex]} (WASD)";
+            stepMessageText.text = steps[stepIndex] == Direction.Zoom
+                ? $"Step {stepIndex + 1}/{steps.Length}: zoom the camera (Mouse Scroll Wheel)"
+                : $"Step {stepIndex + 1}/{steps.Length}: move the camera {steps[stepIndex]} (WASD)";
         }
 
-        // Mostra seta indicadora
-        ShowArrowForDirection(steps[stepIndex]);
+        // Mostra seta indicadora (n/a para zoom)
+        if (steps[stepIndex] != Direction.Zoom)
+            ShowArrowForDirection(steps[stepIndex]);
 
         Debug.Log($"TutorialCamera: iniciou passo {stepIndex} -> {steps[stepIndex]}");
     }
@@ -132,9 +152,9 @@ public class TutorialCameraMovementManager : MonoBehaviour
     {
         waitingForMove = false;
         HideArrow();
-        Debug.Log($"TutorialCamera: passo {currentStep} concluído ({steps[currentStep]})");
+        Debug.Log($"TutorialCamera: passo {currentStep} concluï¿½do ({steps[currentStep]})");
 
-        // Avança
+        // Avanï¿½a
         currentStep++;
 
         if (currentStep >= steps.Length)
@@ -144,16 +164,27 @@ public class TutorialCameraMovementManager : MonoBehaviour
         }
         else
         {
-            // inicia próximo passo automaticamente
+            // inicia prï¿½ximo passo automaticamente
             StartStep(currentStep);
         }
     }
 
     IEnumerator FreeMoveThenPauseAndOpenOptions()
     {
+        // Hide narrator panel automatically
+        if (narrator != null && narrator.panelToClose != null)
+            narrator.panelToClose.SetActive(false);
+
+        // Unlock full camera movement for free play
+        if (camFollow != null)
+        {
+            camFollow.blockMovement = false;
+            camFollow.blockZoom = false;
+        }
+
         // Mensagem e painel durante o tempo livre
         if (stepMessageText != null)
-            stepMessageText.text = $"Tutorial completo! Tens {freeMoveDuration} segundos de movimento livre.";
+            stepMessageText.text = $"Tutorial completed! You have {freeMoveDuration} seconds of free movement.";
 
         if (stepCompletePanel != null)
             stepCompletePanel.SetActive(true);
@@ -163,7 +194,7 @@ public class TutorialCameraMovementManager : MonoBehaviour
         {
             t += Time.deltaTime;
             if (stepMessageText != null)
-                stepMessageText.text = $"Movimento livre: {Mathf.CeilToInt(freeMoveDuration - t)}s";
+                stepMessageText.text = $"Free Movement: {Mathf.CeilToInt(freeMoveDuration - t)}s";
             yield return null;
         }
 
@@ -171,24 +202,26 @@ public class TutorialCameraMovementManager : MonoBehaviour
         if (stepCompletePanel != null)
             stepCompletePanel.SetActive(false);
 
-        // Pausa o jogo e abre o painel de opções (PauseMenu)
-        var pauseMenu = FindObjectOfType<PauseMenu>();
-        if (pauseMenu != null)
+        // Notifica final (opcional)
+        onTutorialComplete?.Invoke();
+
+        // Se ha escena siguiente, cargala; si no pausa el juego
+        if (!string.IsNullOrEmpty(nextSceneName))
         {
-            pauseMenu.PauseGame();
-            Debug.Log("TutorialCamera: tempo livre terminado — PauseMenu aberto.");
+            SceneManager.LoadScene(nextSceneName);
         }
         else
         {
-            // Fallback: pausa manualmente e mostra painel (se existente)
-            Time.timeScale = 0f;
-            Debug.LogWarning("TutorialCamera: PauseMenu não encontrado — jogo pausado manualmente.");
-            if (stepCompletePanel != null)
-                stepCompletePanel.SetActive(true);
+            var pauseMenu = FindObjectOfType<PauseMenu>();
+            if (pauseMenu != null)
+                pauseMenu.PauseGame();
+            else
+            {
+                Time.timeScale = 0f;
+                if (stepCompletePanel != null)
+                    stepCompletePanel.SetActive(true);
+            }
         }
-
-        // Notifica final (opcional)
-        onTutorialComplete?.Invoke();
     }
 
     void EndTutorial()
@@ -213,7 +246,7 @@ public class TutorialCameraMovementManager : MonoBehaviour
 
         if (arrowPrefab == null || cam == null) return;
 
-        // calcula posição para a seta: um pouco à frente da câmera na direção pedida
+        // calcula posiï¿½ï¿½o para a seta: um pouco ï¿½ frente da cï¿½mera na direï¿½ï¿½o pedida
         Vector3 dirVec = DirectionToVector(dir);
         Vector3 pos = cam.transform.position + (Vector3)(dirVec.normalized * arrowDistance);
         pos.z = arrowZ;
@@ -247,7 +280,7 @@ public class TutorialCameraMovementManager : MonoBehaviour
         }
     }
 
-    // Métodos utilitários para debug / inspector
+    // Mï¿½todos utilitï¿½rios para debug / inspector
     public void SimulateCompleteCurrentStep()
     {
         if (!tutorialFinished && waitingForMove) CompleteCurrentStep();

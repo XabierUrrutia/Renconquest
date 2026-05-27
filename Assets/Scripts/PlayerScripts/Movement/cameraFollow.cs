@@ -10,6 +10,10 @@ public class cameraFollow : MonoBehaviour
     public float moveSpeed = 5f;
     private bool isManualControl = true;
 
+    [Header("Tutorial Lock")]
+    public bool blockMovement = false;
+    public bool blockZoom = false;
+
     [Header("Límites de la Cámara")]
     public bool useBounds = false;
     public float minX = -10f;
@@ -81,6 +85,7 @@ public class cameraFollow : MonoBehaviour
     void LateUpdate()
     {
         HandleZoomInput();
+        HandleKeyboardInput();
 
         if (!isManualControl && target != null)
         {
@@ -109,9 +114,18 @@ public class cameraFollow : MonoBehaviour
         }
     }
 
+    void HandleKeyboardInput()
+    {
+        if (blockMovement) return;
+        Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (input.sqrMagnitude > 0.0001f)
+            ManualMove(input);
+    }
+
     void HandleZoomInput()
     {
         if (cam == null) return;
+        if (blockZoom) return;
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scroll) > 0.0001f)
@@ -137,6 +151,7 @@ public class cameraFollow : MonoBehaviour
 
     public void ManualMove(Vector2 input)
     {
+        if (blockMovement) return;
         isManualControl = true;
 
         Vector3 moveInput = new Vector3(input.x, input.y, 0f);

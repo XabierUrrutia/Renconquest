@@ -7,7 +7,7 @@
             "id": "69245b99-4d93-44bb-9959-ca9c9ed39df2",
             "actions": [
                 {
-                    "name": "SelectSomething",
+                    "name": "Select",
                     "type": "Button",
                     "id": "9cccdff6-255e-466f-9231-b9e6feff1060",
                     "expectedControlType": "",
@@ -16,7 +16,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PlaceBuilding",
+                    "name": "Place Building",
                     "type": "Button",
                     "id": "2bcd3d0a-59ff-446e-9107-c9522acbb2c9",
                     "expectedControlType": "",
@@ -68,6 +68,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Move Soldier",
+                    "type": "Button",
+                    "id": "ec0cbe91-14e8-4b84-9058-adb4ddac9e8c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Select multiple",
+                    "type": "Button",
+                    "id": "485633c0-dbe3-4794-9522-690d66dfc97f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Value",
+                    "id": "dca5916a-6e38-4ee3-be1f-8f9761bd9547",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -111,18 +138,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SelectSomething",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "f6f0b0d4-5c7b-4565-b4a2-0e8167f0a372",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PlaceBuilding",
+                    "action": "Place Building",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -145,6 +172,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Camera Up",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a37f6c3-1bad-4b2f-9290-7de257534dcd",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Soldier",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ac3cd5b-a8e3-4a81-ab5a-37d2e6eaa5cb",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select multiple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eb93ed6e-dc4b-48f8-91be-7a618dad3be1",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

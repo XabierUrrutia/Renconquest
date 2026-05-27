@@ -7,13 +7,13 @@ public class BuildingManager : MonoBehaviour
 {
     public static BuildingManager Instance { get; private set; }
 
-    [Header("Base e área de construção")]
+    [Header("Base e ï¿½rea de construï¿½ï¿½o")]
     public Transform militaryBase;
-    [Tooltip("Raio onde é permitida a construção (unidades do mundo)")]
+    [Tooltip("Raio onde ï¿½ permitida a construï¿½ï¿½o (unidades do mundo)")]
     public float buildRadius = 10f;
 
-    [Header("Layers e validação")]
-    [Tooltip("Layers que bloqueiam a colocação (ex.: Ground, Buildings)")]
+    [Header("Layers e validaï¿½ï¿½o")]
+    [Tooltip("Layers que bloqueiam a colocaï¿½ï¿½o (ex.: Ground, Buildings)")]
     public LayerMask blockingLayers;
     public float placeZ = 0f;
 
@@ -39,10 +39,10 @@ public class BuildingManager : MonoBehaviour
     [Tooltip("Referencia ao FogOfWar (se vazio tenta encontrar na cena)")]
     public FogOfWar fogOfWar;
 
-    [Header("Construção - Animator")]
-    [Tooltip("Nome do parâmetro bool no Animator para marcar 'under construction' (se existir)")]
+    [Header("Construï¿½ï¿½o - Animator")]
+    [Tooltip("Nome do parï¿½metro bool no Animator para marcar 'under construction' (se existir)")]
     public string animatorUnderConstructionBool = "UnderConstruction";
-    [Tooltip("Pulso fallback (se não houver Animator)")]
+    [Tooltip("Pulso fallback (se nï¿½o houver Animator)")]
     public float constructionPulseScale = 0.06f;
     public float constructionPulseSpeed = 3.5f;
 
@@ -57,6 +57,9 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<Renderer, Color> previewOriginalColors = new Dictionary<Renderer, Color>();
     private List<Material> previewInstantiatedMaterials = new List<Material>();
 
+    // placement counts per BuildingData
+    private Dictionary<BuildingData, int> _placedCounts = new Dictionary<BuildingData, int>();
+
 
 
     void Awake()
@@ -64,7 +67,7 @@ public class BuildingManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else
         {
-            Debug.LogWarning($"BuildingManager: instância duplicada em '{name}', destruindo componente.");
+            Debug.LogWarning($"BuildingManager: instï¿½ncia duplicada em '{name}', destruindo componente.");
             Destroy(this);
             return;
         }
@@ -114,12 +117,12 @@ public class BuildingManager : MonoBehaviour
 
             previewInstance.transform.position = targetPos;
 
-            // Validar posición (Rojo/Verde)
+            // Validar posiciï¿½n (Rojo/Verde)
             bool valid = IsValidPlacement(targetPos, out Collider2D[] overlapping);
             UpdatePreviewVisual(valid);
 
-            // --- 2. CONFIRMAR CONSTRUCCIÓN (CLIC IZQUIERDO) ---
-            if (Input.GetMouseButtonDown(0)) // 0 es botón izquierdo
+            // --- 2. CONFIRMAR CONSTRUCCIï¿½N (CLIC IZQUIERDO) ---
+            if (Input.GetMouseButtonDown(0)) // 0 es botï¿½n izquierdo
             {
                 // Si haces clic sobre la UI, no construir
                 if (ignoreWhenPointerOverUI && EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
@@ -135,6 +138,15 @@ public class BuildingManager : MonoBehaviour
                         // Construir
                         GameObject placed = Instantiate(currentPrefab, previewInstance.transform.position, Quaternion.identity);
                         placed.name = currentPrefab.name;
+
+                        if (selectedBuildingData != null)
+                        {
+                            if (!_placedCounts.ContainsKey(selectedBuildingData))
+                                _placedCounts[selectedBuildingData] = 0;
+                            _placedCounts[selectedBuildingData]++;
+                        }
+
+                        GameEvents.RaiseBuildingPlaced(placed.transform);
 
                         // Deshabilitar EdificioClick temporalmente para evitar click inmediato
                         EdificioClick ec = placed.GetComponent<EdificioClick>();
@@ -182,7 +194,7 @@ public class BuildingManager : MonoBehaviour
 
         if (buildingData.buildingPrefab == null)
         {
-            Debug.LogWarning($"BuildingManager: prefab não definido no BuildingData '{buildingData.buildingName}'.");
+            Debug.LogWarning($"BuildingManager: prefab nï¿½o definido no BuildingData '{buildingData.buildingName}'.");
             return;
         }
 
@@ -209,7 +221,7 @@ public class BuildingManager : MonoBehaviour
 
         previewInstance.SetActive(true);
 
-        Debug.Log($"BuildingManager: Modo construcción activado para '{data.buildingName}'.");
+        Debug.Log($"BuildingManager: Modo construcciï¿½n activado para '{data.buildingName}'.");
     }
 
     public void CancelPlacing()
@@ -241,14 +253,14 @@ public class BuildingManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[BuildingManager] MoneyManager não encontrado. Permitindo construção sem custo.");
+            Debug.LogWarning("[BuildingManager] MoneyManager nï¿½o encontrado. Permitindo construï¿½ï¿½o sem custo.");
             return true;
         }
     }
 
     IEnumerator ConstructBuildingRoutine(GameObject building, float timeToBuild)
     {
-        // Guardar escala original ANTES de cualquier modificación
+        // Guardar escala original ANTES de cualquier modificaciï¿½n
         Vector3 escalaOriginal = building.transform.localScale;
 
         DisableRuntimeComponents(building);
@@ -282,10 +294,14 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    // Validações principais
+    // Validaï¿½ï¿½es principais
     bool IsValidPlacement(Vector3 worldPos, out Collider2D[] overlapping)
     {
         overlapping = null;
+
+        // 0. Tutorial placement zone restriction
+        if (TutorialPlacementZone.Active != null && !TutorialPlacementZone.Active.Contains(worldPos))
+            return false;
 
         // 1. Dentro del radio de la base
         if (militaryBase != null)
@@ -307,7 +323,7 @@ public class BuildingManager : MonoBehaviour
         if (Physics2D.OverlapCircle(new Vector2(worldPos.x, worldPos.y), 0.3f, groundLayer) == null)
             return false;
 
-        // 4. No encima de edificios, jugadores ni fábricas enemigas
+        // 4. No encima de edificios, jugadores ni fï¿½bricas enemigas
         Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(worldPos.x, worldPos.y), 1.5f);
         foreach (var col in colliders)
         {
@@ -460,4 +476,10 @@ public class BuildingManager : MonoBehaviour
     }
 
     public bool IsPlacing() => isPlacing;
+
+    public int GetPlacedCount(BuildingData data)
+    {
+        if (data == null) return 0;
+        return _placedCounts.TryGetValue(data, out int count) ? count : 0;
+    }
 }

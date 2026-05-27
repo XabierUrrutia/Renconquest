@@ -93,7 +93,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""69245b99-4d93-44bb-9959-ca9c9ed39df2"",
             ""actions"": [
                 {
-                    ""name"": ""SelectSomething"",
+                    ""name"": ""Select"",
                     ""type"": ""Button"",
                     ""id"": ""9cccdff6-255e-466f-9231-b9e6feff1060"",
                     ""expectedControlType"": """",
@@ -102,7 +102,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PlaceBuilding"",
+                    ""name"": ""Place Building"",
                     ""type"": ""Button"",
                     ""id"": ""2bcd3d0a-59ff-446e-9107-c9522acbb2c9"",
                     ""expectedControlType"": """",
@@ -154,6 +154,33 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Move Soldier"",
+                    ""type"": ""Button"",
+                    ""id"": ""ec0cbe91-14e8-4b84-9058-adb4ddac9e8c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select multiple"",
+                    ""type"": ""Button"",
+                    ""id"": ""485633c0-dbe3-4794-9522-690d66dfc97f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Value"",
+                    ""id"": ""dca5916a-6e38-4ee3-be1f-8f9761bd9547"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -197,18 +224,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SelectSomething"",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""f6f0b0d4-5c7b-4565-b4a2-0e8167f0a372"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PlaceBuilding"",
+                    ""action"": ""Place Building"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -233,6 +260,39 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Camera Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a37f6c3-1bad-4b2f-9290-7de257534dcd"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move Soldier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ac3cd5b-a8e3-4a81-ab5a-37d2e6eaa5cb"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select multiple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb93ed6e-dc4b-48f8-91be-7a618dad3be1"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -241,13 +301,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_SelectSomething = m_Gameplay.FindAction("SelectSomething", throwIfNotFound: true);
-        m_Gameplay_PlaceBuilding = m_Gameplay.FindAction("PlaceBuilding", throwIfNotFound: true);
+        m_Gameplay_Select = m_Gameplay.FindAction("Select", throwIfNotFound: true);
+        m_Gameplay_PlaceBuilding = m_Gameplay.FindAction("Place Building", throwIfNotFound: true);
         m_Gameplay_ZoomCamera = m_Gameplay.FindAction("ZoomCamera", throwIfNotFound: true);
         m_Gameplay_CameraUp = m_Gameplay.FindAction("Camera Up", throwIfNotFound: true);
         m_Gameplay_CameraDown = m_Gameplay.FindAction("Camera Down", throwIfNotFound: true);
         m_Gameplay_CameraLeft = m_Gameplay.FindAction("Camera Left", throwIfNotFound: true);
         m_Gameplay_CameraRight = m_Gameplay.FindAction("Camera Right", throwIfNotFound: true);
+        m_Gameplay_MoveSoldier = m_Gameplay.FindAction("Move Soldier", throwIfNotFound: true);
+        m_Gameplay_Selectmultiple = m_Gameplay.FindAction("Select multiple", throwIfNotFound: true);
+        m_Gameplay_Reload = m_Gameplay.FindAction("Reload", throwIfNotFound: true);
     }
 
     ~@Controls()
@@ -328,13 +391,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_SelectSomething;
+    private readonly InputAction m_Gameplay_Select;
     private readonly InputAction m_Gameplay_PlaceBuilding;
     private readonly InputAction m_Gameplay_ZoomCamera;
     private readonly InputAction m_Gameplay_CameraUp;
     private readonly InputAction m_Gameplay_CameraDown;
     private readonly InputAction m_Gameplay_CameraLeft;
     private readonly InputAction m_Gameplay_CameraRight;
+    private readonly InputAction m_Gameplay_MoveSoldier;
+    private readonly InputAction m_Gameplay_Selectmultiple;
+    private readonly InputAction m_Gameplay_Reload;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -347,9 +413,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// </summary>
         public GameplayActions(@Controls wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Gameplay/SelectSomething".
+        /// Provides access to the underlying input action "Gameplay/Select".
         /// </summary>
-        public InputAction @SelectSomething => m_Wrapper.m_Gameplay_SelectSomething;
+        public InputAction @Select => m_Wrapper.m_Gameplay_Select;
         /// <summary>
         /// Provides access to the underlying input action "Gameplay/PlaceBuilding".
         /// </summary>
@@ -374,6 +440,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/CameraRight".
         /// </summary>
         public InputAction @CameraRight => m_Wrapper.m_Gameplay_CameraRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/MoveSoldier".
+        /// </summary>
+        public InputAction @MoveSoldier => m_Wrapper.m_Gameplay_MoveSoldier;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Selectmultiple".
+        /// </summary>
+        public InputAction @Selectmultiple => m_Wrapper.m_Gameplay_Selectmultiple;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Reload".
+        /// </summary>
+        public InputAction @Reload => m_Wrapper.m_Gameplay_Reload;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -400,9 +478,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @SelectSomething.started += instance.OnSelectSomething;
-            @SelectSomething.performed += instance.OnSelectSomething;
-            @SelectSomething.canceled += instance.OnSelectSomething;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
             @PlaceBuilding.started += instance.OnPlaceBuilding;
             @PlaceBuilding.performed += instance.OnPlaceBuilding;
             @PlaceBuilding.canceled += instance.OnPlaceBuilding;
@@ -421,6 +499,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @CameraRight.started += instance.OnCameraRight;
             @CameraRight.performed += instance.OnCameraRight;
             @CameraRight.canceled += instance.OnCameraRight;
+            @MoveSoldier.started += instance.OnMoveSoldier;
+            @MoveSoldier.performed += instance.OnMoveSoldier;
+            @MoveSoldier.canceled += instance.OnMoveSoldier;
+            @Selectmultiple.started += instance.OnSelectmultiple;
+            @Selectmultiple.performed += instance.OnSelectmultiple;
+            @Selectmultiple.canceled += instance.OnSelectmultiple;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
         }
 
         /// <summary>
@@ -432,9 +519,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="GameplayActions" />
         private void UnregisterCallbacks(IGameplayActions instance)
         {
-            @SelectSomething.started -= instance.OnSelectSomething;
-            @SelectSomething.performed -= instance.OnSelectSomething;
-            @SelectSomething.canceled -= instance.OnSelectSomething;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
             @PlaceBuilding.started -= instance.OnPlaceBuilding;
             @PlaceBuilding.performed -= instance.OnPlaceBuilding;
             @PlaceBuilding.canceled -= instance.OnPlaceBuilding;
@@ -453,6 +540,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @CameraRight.started -= instance.OnCameraRight;
             @CameraRight.performed -= instance.OnCameraRight;
             @CameraRight.canceled -= instance.OnCameraRight;
+            @MoveSoldier.started -= instance.OnMoveSoldier;
+            @MoveSoldier.performed -= instance.OnMoveSoldier;
+            @MoveSoldier.canceled -= instance.OnMoveSoldier;
+            @Selectmultiple.started -= instance.OnSelectmultiple;
+            @Selectmultiple.performed -= instance.OnSelectmultiple;
+            @Selectmultiple.canceled -= instance.OnSelectmultiple;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
         }
 
         /// <summary>
@@ -494,14 +590,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public interface IGameplayActions
     {
         /// <summary>
-        /// Method invoked when associated input action "SelectSomething" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Select" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSelectSomething(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "PlaceBuilding" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Place Building" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
@@ -542,5 +638,26 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCameraRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Move Soldier" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMoveSoldier(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Select multiple" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelectmultiple(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Reload" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnReload(InputAction.CallbackContext context);
     }
 }

@@ -24,13 +24,13 @@ EditorBuildSettings:
     path: Assets/Scenes/Maps/Portugal Maps/third map.unity
     guid: 40a8ab6066afe384f8a2766af2b8dfd4
   - enabled: 1
-    path: Assets/Scenes/Maps/Portugal Maps/tutorial.unity
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial.unity
     guid: 92b874f13261656469616fa217fe2dd5
   - enabled: 1
-    path: Assets/Scenes/Maps/Portugal Maps/tutorial 1.unity
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial 1.unity
     guid: a05c95e24cc3a144ab4dba8b4dcb64e4
   - enabled: 1
-    path: Assets/Scenes/Maps/Portugal Maps/tutorial 2.unity
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial 2.unity
     guid: 5b21c354dbde98c41a9873f7ade31b60
   - enabled: 1
     path: Assets/Scenes/Interface/Game Over.unity
@@ -41,6 +41,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Interface/SettingsMenu.unity
     guid: 61dae89075222694cae56f407178cb2c
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial 3.unity
+    guid: f1d33e11336811c4f96211f27a348c8a
+  - enabled: 1
+    path: Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial 4.unity
+    guid: 11eaf8c4bf043c64ea900695089ef04d
+  - enabled: 1
+    path: Assets/Scenes/Interface/TutorialComplete.unity
+    guid: 90ae02626f6823b4184786e8d519d029
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 6acfcb1027956684b89346f813045ac3, type: 3}
   m_UseUCBPForAssetBundles: 0

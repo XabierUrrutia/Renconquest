@@ -6,24 +6,29 @@ public class TutorialNarrator : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI narratorText; // Texto onde as falas aparecem
-    public Button nextButton;            // Botão para avançar a fala
-    public GameObject panelToClose;      // Opcional: painel que contém o diálogo (será desativado ao fim)
+    public Button nextButton;            // Botï¿½o para avanï¿½ar a fala
+    public GameObject panelToClose;      // Opcional: painel que contï¿½m o diï¿½logo (serï¿½ desativado ao fim)
 
-    [Header("Falas (máx. 4)")]
+    [Header("Falas (mï¿½x. 5)")]
+    [Header("Behaviour")]
+    [Tooltip("Uncheck to disable auto-dialog on Start. Use when another script drives the narrator.")]
+    public bool autoStart = true;
+
     [TextArea(2, 4)] public string fala1;
     [TextArea(2, 4)] public string fala2;
     [TextArea(2, 4)] public string fala3;
     [TextArea(2, 4)] public string fala4;
+    [TextArea(2, 4)] public string fala5;
 
     private string[] falas;
     private int index = 0;
 
     void Awake()
     {
-        // Agrupa as 4 falas numa array para iteração simples
-        falas = new string[4] { fala1 ?? "", fala2 ?? "", fala3 ?? "", fala4 ?? "" };
+        // Agrupa as 5 falas numa array para iteraï¿½ï¿½o simples
+        falas = new string[5] { fala1 ?? "", fala2 ?? "", fala3 ?? "", fala4 ?? "", fala5 ?? "" };
 
-        // Se não foram atribuídos via Inspector, tenta encontrar componentes filhos
+        // Se nï¿½o foram atribuï¿½dos via Inspector, tenta encontrar componentes filhos
         if (narratorText == null)
             narratorText = GetComponentInChildren<TextMeshProUGUI>();
         if (nextButton == null)
@@ -31,7 +36,7 @@ public class TutorialNarrator : MonoBehaviour
 
         if (nextButton != null)
         {
-            // Garante que o listener está apenas uma vez
+            // Garante que o listener estï¿½ apenas uma vez
             nextButton.onClick.RemoveListener(NextLine);
             nextButton.onClick.AddListener(NextLine);
         }
@@ -39,15 +44,16 @@ public class TutorialNarrator : MonoBehaviour
 
     void Start()
     {
+        if (!autoStart) return;
         index = 0;
         ShowCurrentLine();
     }
 
-    // Método público para ligar ao OnClick do botão (se preferir ligar manualmente)
+    // Mï¿½todo pï¿½blico para ligar ao OnClick do botï¿½o (se preferir ligar manualmente)
     public void NextLine()
     {
         index++;
-        // Ignora falas vazias ao avançar
+        // Ignora falas vazias ao avanï¿½ar
         while (index < falas.Length && string.IsNullOrWhiteSpace(falas[index]))
             index++;
 
@@ -64,7 +70,7 @@ public class TutorialNarrator : MonoBehaviour
     {
         if (narratorText == null) return;
 
-        // Encontra a próxima fala não vazia a partir do índice atual
+        // Encontra a prï¿½xima fala nï¿½o vazia a partir do ï¿½ndice atual
         int i = index;
         while (i < falas.Length && string.IsNullOrWhiteSpace(falas[i])) i++;
 
@@ -92,7 +98,7 @@ public class TutorialNarrator : MonoBehaviour
         enabled = false;
     }
 
-    // Permite reiniciar o diálogo via código se necessário
+    // Permite reiniciar o diï¿½logo via cï¿½digo se necessï¿½rio
     public void RestartDialogue()
     {
         index = 0;
@@ -107,21 +113,21 @@ public class TutorialNarrator : MonoBehaviour
         }
     }
 
-    // ----------------- Novos métodos públicos -----------------
+    // ----------------- Novos mï¿½todos pï¿½blicos -----------------
 
-    // Mostra a fala específica pelo seu índice (0-based: 0..4)
+    // Mostra a fala especï¿½fica pelo seu ï¿½ndice (0-based: 0..4)
     public void ShowLineIndex(int falaIndex)
     {
         if (falas == null || falas.Length == 0) return;
         if (falaIndex < 0 || falaIndex >= falas.Length)
         {
-            Debug.LogWarning($"TutorialNarrator: índice de fala inválido ({falaIndex}).");
+            Debug.LogWarning($"TutorialNarrator: ï¿½ndice de fala invï¿½lido ({falaIndex}).");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(falas[falaIndex]))
         {
-            Debug.LogWarning($"TutorialNarrator: fala em índice {falaIndex} está vazia.");
+            Debug.LogWarning($"TutorialNarrator: fala em ï¿½ndice {falaIndex} estï¿½ vazia.");
             return;
         }
 
@@ -130,14 +136,14 @@ public class TutorialNarrator : MonoBehaviour
             narratorText.text = falas[falaIndex];
     }
 
-    // Mostra texto customizado (não presente nas 5 falas)
+    // Mostra texto customizado (nï¿½o presente nas 5 falas)
     public void ShowCustomText(string text)
     {
         if (narratorText == null) return;
         narratorText.text = text ?? "";
     }
 
-    // Retorna quantas falas estão disponíveis (sempre 5 neste design)
+    // Retorna quantas falas estï¿½o disponï¿½veis (sempre 5 neste design)
     public int GetLineCount()
     {
         return falas != null ? falas.Length : 0;

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1779405025270,
+  "lastScanned": 1779792503702,
   "projectRoot": "C:\\Users\\xabie\\Documents\\GitHub\\Renconquest",
   "techStack": {
     "languages": [],
@@ -35,8 +35,8 @@
     "Assets": {
       "path": "Assets",
       "purpose": "Static assets",
-      "fileCount": 10,
-      "lastAccessed": 1779405025241,
+      "fileCount": 12,
+      "lastAccessed": 1779792503674,
       "keyFiles": [
         "Audio.meta",
         "Movement.meta",
@@ -48,8 +48,8 @@
     "Library": {
       "path": "Library",
       "purpose": null,
-      "fileCount": 29,
-      "lastAccessed": 1779405025242,
+      "fileCount": 27,
+      "lastAccessed": 1779792503676,
       "keyFiles": [
         "AnnotationManager",
         "ArtifactDB",
@@ -61,28 +61,28 @@
     "Logs": {
       "path": "Logs",
       "purpose": null,
-      "fileCount": 5,
-      "lastAccessed": 1779405025243,
+      "fileCount": 7,
+      "lastAccessed": 1779792503678,
       "keyFiles": [
-        "AssetImportWorker0.log",
-        "AssetImportWorker1.log",
-        "shadercompiler-AssetImportWorker0-0.log",
-        "shadercompiler-AssetImportWorker1-0.log",
-        "shadercompiler-UnityShaderCompiler.exe-0.log"
+        "AssetImportWorker0-prev.log",
+        "AssetImportWorker1-prev.log",
+        "AssetImportWorker2-prev.log",
+        "AssetImportWorker3-prev.log",
+        "AssetImportWorker4-prev.log"
       ]
     },
     "obj": {
       "path": "obj",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1779405025244,
+      "lastAccessed": 1779792503678,
       "keyFiles": []
     },
     "Packages": {
       "path": "Packages",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1779405025244,
+      "lastAccessed": 1779792503680,
       "keyFiles": [
         "manifest.json",
         "packages-lock.json"
@@ -92,7 +92,7 @@
       "path": "ProjectSettings",
       "purpose": null,
       "fileCount": 24,
-      "lastAccessed": 1779405025245,
+      "lastAccessed": 1779792503680,
       "keyFiles": [
         "AudioManager.asset",
         "ClusterInputManager.asset",
@@ -104,21 +104,18 @@
     "Temp": {
       "path": "Temp",
       "purpose": null,
-      "fileCount": 78,
-      "lastAccessed": 1779405025246,
+      "fileCount": 2,
+      "lastAccessed": 1779792503681,
       "keyFiles": [
-        "01bf33010cd34ba188b7db6cfc091a5f.res",
-        "01bf33010cd34ba188b7db6cfc091a5f.resG",
-        "028bf501cb07dce4c55104460acea00b.res",
-        "028bf501cb07dce4c55104460acea00b.resG",
-        "028bf501cb07dce4c55104460acea00b.resS"
+        "FSTimeGet-09ed22d24e79133419c0dc7c373db175",
+        "UnityLockfile"
       ]
     },
     "UserSettings": {
       "path": "UserSettings",
       "purpose": null,
       "fileCount": 3,
-      "lastAccessed": 1779405025246,
+      "lastAccessed": 1779792503681,
       "keyFiles": [
         "EditorUserSettings.asset",
         "Search.index",
@@ -128,15 +125,153 @@
   },
   "hotPaths": [
     {
+      "path": "Assets\\Scripts\\TutorialScripts\\TutorialCameraMovementManager.cs",
+      "accessCount": 27,
+      "lastAccessed": 1779793498993,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\TutorialScripts\\TutorialStep2Manager.cs",
+      "accessCount": 19,
+      "lastAccessed": 1779807619980,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\TutorialScripts\\TutorialStep1Manager.cs",
+      "accessCount": 13,
+      "lastAccessed": 1779807210495,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\UnitSelectionManager.cs",
+      "accessCount": 12,
+      "lastAccessed": 1779809225729,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings UI\\BuildingManager.cs",
+      "accessCount": 10,
+      "lastAccessed": 1779722696717,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\PlayerScripts\\Movement\\cameraFollow.cs",
+      "accessCount": 10,
+      "lastAccessed": 1779863928938,
+      "type": "file"
+    },
+    {
+      "path": "Assets/Scripts",
+      "accessCount": 9,
+      "lastAccessed": 1779704819591,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\Scripts\\GameManager.cs",
+      "accessCount": 8,
+      "lastAccessed": 1779792661420,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\GameEvents.cs",
+      "accessCount": 8,
+      "lastAccessed": 1779793556671,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\TutorialScripts\\TutorialNarrator.cs",
+      "accessCount": 8,
+      "lastAccessed": 1779794591148,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\TutorialScripts\\TutorialBuildingManager.cs",
+      "accessCount": 7,
+      "lastAccessed": 1779864128083,
+      "type": "file"
+    },
+    {
+      "path": "Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial.unity",
+      "accessCount": 4,
+      "lastAccessed": 1779702020313,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial 2.unity",
+      "accessCount": 3,
+      "lastAccessed": 1779704146585,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\Scripts\\UnitsUi\\PanelSoldadosUI.cs",
+      "accessCount": 3,
+      "lastAccessed": 1779707007425,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings UI\\BuildingButtons.cs",
+      "accessCount": 3,
+      "lastAccessed": 1779712053397,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Interface_Scripts\\CameraInputAdapter.cs",
+      "accessCount": 3,
+      "lastAccessed": 1779724808893,
+      "type": "file"
+    },
+    {
       "path": "README.md",
       "accessCount": 2,
       "lastAccessed": 1779405580544,
       "type": "file"
     },
     {
-      "path": "Assets\\Scripts\\GameManager.cs",
-      "accessCount": 1,
-      "lastAccessed": 1779405481073,
+      "path": "Assets\\Scripts\\Interface_Scripts\\Controls.cs",
+      "accessCount": 2,
+      "lastAccessed": 1779701801045,
+      "type": "file"
+    },
+    {
+      "path": "Assets/Scripts/TutorialScripts/TutorialCameraMovementManager.cs.meta",
+      "accessCount": 2,
+      "lastAccessed": 1779702014711,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scenes/Maps/Portugal Maps/tutorial/tutorial 1.unity",
+      "accessCount": 2,
+      "lastAccessed": 1779702045458,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scripts/TutorialScripts/TutorialCameraMovementManager.cs",
+      "accessCount": 2,
+      "lastAccessed": 1779704233427,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scripts/Buildings UI/BuildingManager.cs",
+      "accessCount": 2,
+      "lastAccessed": 1779706701116,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\Scripts\\Interface_Scripts\\Interface_Buttons.cs",
+      "accessCount": 2,
+      "lastAccessed": 1779707125470,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings UI\\BuildingShopUI.cs",
+      "accessCount": 2,
+      "lastAccessed": 1779707252473,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings UI\\BuildingClickManager.cs",
+      "accessCount": 2,
+      "lastAccessed": 1779707275824,
       "type": "file"
     },
     {
@@ -149,6 +284,144 @@
       "path": "Assets\\Scripts\\EnemyWaveManager.cs",
       "accessCount": 1,
       "lastAccessed": 1779405482880,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\EnemyScripts\\EnemyBase.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779659363009,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings\\EnemyBaseFactory.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779659363492,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\PlayerScripts\\SelectableUnit.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779659369397,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\PlayerScripts\\PlayerPositionManager.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779659375149,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Settings\\SettingsManager.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779659645434,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Samples\\Input System\\1.14.2\\Rebinding UI\\RebindActionUI.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779661238830,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Samples\\Input System\\1.14.2\\Rebinding UI\\RebindSaveLoad.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779661239249,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Interface_Scripts\\InputBindingsLoader.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779661266926,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\prefabs\\Controls prefabs\\Rebinding.prefab",
+      "accessCount": 1,
+      "lastAccessed": 1779661271989,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\CamaraAvanzada.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779701722870,
+      "type": "file"
+    },
+    {
+      "path": "Assets/Scenes",
+      "accessCount": 1,
+      "lastAccessed": 1779701932863,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scenes/Interface/ControlsMenu.unity",
+      "accessCount": 1,
+      "lastAccessed": 1779701939785,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scripts/CamaraAvanzada.cs.meta",
+      "accessCount": 1,
+      "lastAccessed": 1779702001127,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scripts/PlayerScripts/Movement/cameraFollow.cs.meta",
+      "accessCount": 1,
+      "lastAccessed": 1779702137836,
+      "type": "directory"
+    },
+    {
+      "path": "Assets/Scripts/Interface_Scripts/CameraInputAdapter.cs.meta",
+      "accessCount": 1,
+      "lastAccessed": 1779702138138,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings\\BuildingSpawner.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779704167857,
+      "type": "file"
+    },
+    {
+      "path": "Assets/Scripts/Interface_Scripts/InGameOptions.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779704649739,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings UI\\BuildingClickHandler.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779704672678,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\Buildings\\Building.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779705246972,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\UnitsUi\\SoldierShopUI.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779705717704,
+      "type": "file"
+    },
+    {
+      "path": "Assets/Scripts/UnitsUi/PanelSoldadosUI.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779705726653,
+      "type": "directory"
+    },
+    {
+      "path": "Assets\\Scripts\\MoneyManager.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779706258016,
+      "type": "file"
+    },
+    {
+      "path": "Assets\\Scripts\\PopulationManager.cs",
+      "accessCount": 1,
+      "lastAccessed": 1779707012111,
       "type": "file"
     }
   ],

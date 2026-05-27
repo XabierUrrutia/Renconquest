@@ -38,6 +38,7 @@ public class EnemyDeathListener : MonoBehaviour
 
         Debug.Log($"[EnemyDeathListener] InvokeDeath() chamado em '{gameObject.name}'");
         onEnemyDied?.Invoke();
+        GameEvents.RaiseTutorialEnemyDied();
 
         _isInvoking = false;
     }
